@@ -1,0 +1,190 @@
+// Schéma Prisma — AfricaScout
+// Documentation : https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  // L'URL est configurée dans prisma.config.ts (nouveauté Prisma 7)
+}
+
+// ─────────────────────────────────────────────
+// ENUMS — valeurs fixes définies à l'avance
+// ─────────────────────────────────────────────
+
+// Les 4 rôles possibles sur la plateforme
+enum Role {
+  PLAYER   // Joueur de football cherchant à être découvert
+  SCOUT    // Scout ou recruteur indépendant
+  ACADEMY  // Académie de football officielle
+  AGENT    // Agent de joueurs
+}
+
+// Les 3 niveaux d'abonnement
+enum SubscriptionTier {
+  FREE            // Gratuit — fonctionnalités limitées
+  PRO_SCOUT       // 29€/mois — pour les scouts professionnels
+  ELITE_ACADEMY   // 89€/mois — pour les académies
+}
+
+// Les postes de football (9 postes définis dans la spec)
+enum Position {
+  GK  // Gardien de but
+  CB  // Défenseur central
+  LB  // Latéral gauche
+  RB  // Latéral droit
+  CM  // Milieu central
+  AM  // Milieu offensif
+  LW  // Ailier gauche
+  RW  // Ailier droit
+  ST  // Attaquant de pointe
+}
+
+// ─────────────────────────────────────────────
+// TABLE USER — commune à tous les rôles
+// C'est le cœur du système : chaque personne inscrite a un User
+// ─────────────────────────────────────────────
+model User {
+  id               String           @id @default(uuid())  // UUID généré automatiquement
+  clerkId          String           @unique               // ID fourni par Clerk à l'inscription
+  email            String           @unique
+  role             Role
+  fullName         String
+  avatarUrl        String?                                 // Nullable — pas obligatoire
+  isVerified       Boolean          @default(false)        // Badge vérifié (académies)
+  subscriptionTier SubscriptionTier @default(FREE)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt             // Mis à jour automatiquement par Prisma
+
+  // Relations vers les profils spécifiques (1-to-1)
+  playerProfile    PlayerProfile?
+  scoutProfile     ScoutProfile?
+  academy          Academy?
+
+  // Relations pour la messagerie
+  messagesSent     Message[]        @relation("MessageFrom")
+  messagesReceived Message[]        @relation("MessageTo")
+
+  // Notes données par ce scout
+  ratingsGiven     ScoutRating[]    @relation("RatingByScout")
+}
+
+// ─────────────────────────────────────────────
+// TABLE PLAYERPROFILE — données spécifiques aux joueurs
+// ─────────────────────────────────────────────
+model PlayerProfile {
+  id         String    @id @default(uuid())
+  userId     String    @unique              // Relation 1-to-1 : un joueur = un User
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  age        Int
+  position   Position
+  country    String    @db.Char(2)          // Code ISO pays : "SN", "GH", "MA"...
+  region     String?                        // Région du Sénégal (ex: "Dakar", "Thiès")
+  club       String?                        // Club ou académie actuelle (facultatif)
+  bio        String?                        // Description libre du joueur
+
+  // Statistiques de la saison — stockées en JSON flexible
+  // Format : { "goals": 12, "assists": 5, "matches": 20, "minutes": 1800 }
+  stats      Json      @default("{}")
+
+  // Attributs physiques notés de 0 à 100
+  // Format : { "speed": 85, "technique": 72, "physical": 80, "mental": 75 }
+  attributes Json      @default("{}")
+
+  // Score composite calculé (0-100) — voir formule dans la spec
+  rating     Float     @default(0)
+
+  // Lien optionnel vers une académie partenaire
+  academyId  String?
+  academy    Academy?  @relation(fields: [academyId], references: [id])
+
+  // Vidéos highlights du joueur
+  videos     Video[]
+
+  // Notes reçues de scouts
+  ratingsReceived ScoutRating[] @relation("RatingForPlayer")
+}
+
+// ─────────────────────────────────────────────
+// TABLE SCOUTPROFILE — données spécifiques aux scouts et agents
+// ─────────────────────────────────────────────
+model ScoutProfile {
+  id             String  @id @default(uuid())
+  userId         String  @unique
+  user           User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  organization   String?  // Club ou agence représentée (ex: "Espérance de Tunis")
+  searchRegion   String?  // Zone géographique de recherche prioritaire (ex: "Afrique de l'Ouest")
+}
+
+// ─────────────────────────────────────────────
+// TABLE ACADEMY — données spécifiques aux académies
+// ─────────────────────────────────────────────
+model Academy {
+  id           String    @id @default(uuid())
+  userId       String    @unique
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name         String
+  country      String    @db.Char(2)
+  verifiedAt   DateTime?                   // Date du badge officiel — null si pas encore vérifié
+  playerCount  Int       @default(0)
+  foundedYear  Int?
+
+  // Les joueurs rattachés à cette académie
+  players      PlayerProfile[]
+}
+
+// ─────────────────────────────────────────────
+// TABLE VIDEO — highlights uploadés par les joueurs
+// ─────────────────────────────────────────────
+model Video {
+  id            String        @id @default(uuid())
+  playerId      String
+  player        PlayerProfile @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  cloudinaryUrl String        // URL de la vidéo sur Cloudinary
+  title         String
+  views         Int           @default(0)
+  likes         Int           @default(0)
+  durationSec   Int?          // Durée en secondes (null si non détectée)
+  createdAt     DateTime      @default(now())
+}
+
+// ─────────────────────────────────────────────
+// TABLE MESSAGE — messagerie privée entre utilisateurs
+// ─────────────────────────────────────────────
+model Message {
+  id         String    @id @default(uuid())
+  fromUserId String
+  from       User      @relation("MessageFrom", fields: [fromUserId], references: [id])
+  toUserId   String
+  to         User      @relation("MessageTo", fields: [toUserId], references: [id])
+
+  content    String
+  readAt     DateTime?  // Null = message non lu
+  createdAt  DateTime   @default(now())
+}
+
+// ─────────────────────────────────────────────
+// TABLE SCOUTRATING — notes données par les scouts aux joueurs
+// Uniquement accessible aux scouts PRO_SCOUT ou ELITE_ACADEMY
+// ─────────────────────────────────────────────
+model ScoutRating {
+  id        String        @id @default(uuid())
+  scoutId   String
+  scout     User          @relation("RatingByScout", fields: [scoutId], references: [id])
+  playerId  String
+  player    PlayerProfile @relation("RatingForPlayer", fields: [playerId], references: [id])
+
+  score     Int           // Note de 1 à 10
+  comment   String?       // Commentaire privé visible seulement par le scout
+  createdAt DateTime      @default(now())
+
+  // Un scout ne peut noter un joueur qu'une seule fois
+  @@unique([scoutId, playerId])
+}

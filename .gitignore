@@ -1,0 +1,29 @@
+# Dépendances
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# Variables d'environnement — NE JAMAIS commiter ces fichiers
+.env
+.env.local
+.env.production
+.env*.local
+
+# Build
+dist/
+build/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Prisma — les migrations sont committées, mais pas les binaires générés
+prisma/generated/
+
+/lib/generated/prisma
