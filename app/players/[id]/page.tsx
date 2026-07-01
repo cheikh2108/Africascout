@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { MapPin, Star, Play, ArrowLeft, Eye, Heart, MessageCircle } from "lucide-react";
+import { MapPin, Star, Play, ArrowLeft, Eye, Heart, MessageCircle, CheckCircle2 } from "lucide-react";
 
 const POSITIONS: Record<string, string> = {
   GK: "Gardien", CB: "Défenseur central", LB: "Latéral gauche",
@@ -11,21 +11,13 @@ const POSITIONS: Record<string, string> = {
   LW: "Ailier gauche", RW: "Ailier droit", ST: "Attaquant",
 };
 
-const COUNTRIES: Record<string, string> = {
-  SN: "Sénégal", GH: "Ghana", NG: "Nigeria", CI: "Côte d'Ivoire",
-  MA: "Maroc", EG: "Égypte", CM: "Cameroun", ML: "Mali",
-  GN: "Guinée", ZA: "Afrique du Sud", TN: "Tunisie", DZ: "Algérie",
-  FR: "France", GB: "Angleterre",
-};
-
-// Page serveur — meilleure performance, pas besoin de "use client"
 export default async function PlayerPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const { userId: clerkId } = await auth();
 
   const [player, me] = await Promise.all([
     prisma.playerProfile.findUnique({
-    where: { id },
+      where: { id },
       include: {
         user:   { select: { fullName: true, avatarUrl: true, isVerified: true } },
         videos: { orderBy: { createdAt: "desc" } },
@@ -36,88 +28,87 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
 
   if (!player) notFound();
 
-  // On ne montre pas le bouton "Contacter" sur son propre profil
   const isOwnProfile = me?.id === player.userId;
-
   const stats = (player.stats as Record<string, number>) ?? {};
 
   return (
     <div className="min-h-screen bg-[#0D0D0D] py-8 px-4">
-      <div className="max-w-2xl mx-auto space-y-5">
+      <div className="max-w-2xl mx-auto space-y-4">
 
-        {/* Bouton retour */}
         <Link
           href="/search"
-          className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-white transition"
+          className="inline-flex items-center gap-2 text-sm text-[#6B7280] hover:text-white transition-colors duration-150 cursor-pointer"
         >
-          <ArrowLeft size={15} /> Retour aux résultats
+          <ArrowLeft size={15} /> Retour
         </Link>
 
         {/* Carte profil */}
-        <div className="bg-[#111] border border-gray-800 rounded-2xl p-6">
-          <div className="flex items-center gap-4 mb-5">
-            <div className="relative w-16 h-16 rounded-full overflow-hidden bg-gray-800 flex-shrink-0">
+        <div className="bg-[#111] border border-[#1F2937] rounded-2xl p-6">
+          <div className="flex items-start gap-4 mb-5">
+            <div className="relative w-16 h-16 rounded-full overflow-hidden bg-[#1F2937] flex-shrink-0 ring-2 ring-[#00A651]/30">
               {player.user.avatarUrl ? (
                 <Image src={player.user.avatarUrl} alt={player.user.fullName} fill className="object-cover" />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-2xl font-bold text-gray-500">
+                <div className="w-full h-full flex items-center justify-center font-heading text-2xl font-bold text-[#00A651]">
                   {player.user.fullName[0]?.toUpperCase()}
                 </div>
               )}
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-xl font-bold text-white">{player.user.fullName}</h1>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h1 className="font-heading text-xl font-bold text-white">{player.user.fullName}</h1>
                 {player.user.isVerified && (
-                  <span className="text-xs bg-[#00A651]/20 text-[#00A651] px-2 py-0.5 rounded-full">✓ Vérifié</span>
+                  <span className="flex items-center gap-1 text-xs bg-[#00A651]/15 text-[#00A651] px-2 py-0.5 rounded-full font-semibold">
+                    <CheckCircle2 size={11} /> Vérifié
+                  </span>
                 )}
               </div>
-              <div className="flex items-center gap-3 text-sm text-gray-500 mt-1">
+              <div className="flex items-center gap-3 text-sm text-[#6B7280] mt-1 flex-wrap">
                 <span className="text-gray-300 font-medium">{POSITIONS[player.position] ?? player.position}</span>
-                <span className="flex items-center gap-1"><MapPin size={12} />{COUNTRIES[player.country] ?? player.country}</span>
+                <span className="flex items-center gap-1"><MapPin size={12} />Sénégal</span>
                 <span>{player.age} ans</span>
               </div>
-              {player.club && <p className="text-xs text-gray-600 mt-0.5">{player.club}</p>}
+              {player.club && <p className="text-xs text-[#6B7280] mt-1">{player.club}</p>}
             </div>
-            {/* Score composite */}
-            <div className="ml-auto text-right">
+            <div className="flex-shrink-0 text-right">
               <div className="flex items-center gap-1 text-[#F5A623] justify-end">
                 <Star size={16} fill="#F5A623" />
-                <span className="text-2xl font-bold">{player.rating.toFixed(1)}</span>
+                <span className="font-heading text-2xl font-bold text-white">{player.rating.toFixed(1)}</span>
               </div>
-              <div className="text-xs text-gray-600">score global</div>
+              <div className="text-xs text-[#6B7280]">score</div>
             </div>
           </div>
 
-          {/* Bouton contacter — visible uniquement si ce n'est pas son propre profil */}
           {!isOwnProfile && (
             <Link
               href={`/messages?with=${player.userId}`}
-              className="mt-4 flex items-center justify-center gap-2 w-full py-2.5 border border-[#00A651] text-[#00A651] rounded-xl text-sm font-semibold hover:bg-[#00A651] hover:text-white transition"
+              className="flex items-center justify-center gap-2 w-full py-3 bg-[#00A651] text-white rounded-xl text-sm font-semibold hover:bg-green-600 transition-colors duration-150 cursor-pointer"
             >
               <MessageCircle size={16} /> Contacter
             </Link>
           )}
 
           {player.bio && (
-            <p className="text-gray-400 text-sm leading-relaxed border-t border-gray-800 pt-4 mt-4">{player.bio}</p>
+            <p className="text-[#6B7280] text-sm leading-relaxed border-t border-[#1F2937] pt-4 mt-4">
+              {player.bio}
+            </p>
           )}
         </div>
 
-        {/* Statistiques */}
-        <div className="bg-[#111] border border-gray-800 rounded-2xl p-6">
-          <h2 className="text-base font-bold text-white mb-4">Statistiques saison</h2>
+        {/* Stats */}
+        <div className="bg-[#111] border border-[#1F2937] rounded-2xl p-6">
+          <h2 className="font-heading font-semibold text-white mb-4">Statistiques saison</h2>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             {[
-              { key: "goals",   label: "Buts",    emoji: "⚽" },
-              { key: "assists", label: "Passes",   emoji: "🎯" },
-              { key: "matches", label: "Matchs",   emoji: "🏟️" },
-              { key: "minutes", label: "Minutes",  emoji: "⏱️" },
-            ].map(({ key, label, emoji }) => (
-              <div key={key} className="bg-gray-900 rounded-xl p-4 text-center">
-                <div className="text-xl mb-1">{emoji}</div>
-                <div className="text-2xl font-bold text-white">{stats[key] ?? 0}</div>
-                <div className="text-xs text-gray-500 mt-1">{label}</div>
+              { key: "goals",   label: "Buts",    icon: "⚽" },
+              { key: "assists", label: "Passes",  icon: "🎯" },
+              { key: "matches", label: "Matchs",  icon: "🏟" },
+              { key: "minutes", label: "Minutes", icon: "⏱" },
+            ].map(({ key, label, icon }) => (
+              <div key={key} className="bg-[#0D0D0D] border border-[#1F2937] rounded-xl p-4 text-center">
+                <div className="text-xl mb-1">{icon}</div>
+                <div className="font-heading text-2xl font-bold text-white">{stats[key] ?? 0}</div>
+                <div className="text-xs text-[#6B7280] mt-1">{label}</div>
               </div>
             ))}
           </div>
@@ -125,28 +116,28 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
 
         {/* Vidéos */}
         {player.videos.length > 0 && (
-          <div className="bg-[#111] border border-gray-800 rounded-2xl p-6">
-            <h2 className="text-base font-bold text-white mb-4">Vidéos highlights</h2>
-            <div className="space-y-3">
+          <div className="bg-[#111] border border-[#1F2937] rounded-2xl p-6">
+            <h2 className="font-heading font-semibold text-white mb-4">Vidéos highlights</h2>
+            <div className="space-y-2.5">
               {player.videos.map((v) => (
                 <a
                   key={v.id}
                   href={v.cloudinaryUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 bg-gray-900 rounded-xl p-3 hover:bg-gray-800 transition group"
+                  className="flex items-center gap-3 bg-[#0D0D0D] border border-[#1F2937] rounded-xl p-3 hover:border-[#00A651]/40 transition-all duration-150 group cursor-pointer"
                 >
-                  <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-[#00A651]/20 transition">
+                  <div className="w-10 h-10 bg-[#00A651]/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#00A651]/20 transition-colors duration-150">
                     <Play size={16} className="text-[#00A651]" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-white text-sm font-medium truncate">{v.title}</p>
-                    <div className="flex gap-3 text-xs text-gray-500 mt-0.5">
-                      <span className="flex items-center gap-1"><Eye size={11} />{v.views}</span>
-                      <span className="flex items-center gap-1"><Heart size={11} />{v.likes}</span>
+                    <div className="flex gap-3 text-xs text-[#6B7280] mt-0.5">
+                      <span className="flex items-center gap-1"><Eye size={10} />{v.views}</span>
+                      <span className="flex items-center gap-1"><Heart size={10} />{v.likes}</span>
                     </div>
                   </div>
-                  <span className="text-xs text-[#00A651] group-hover:underline">Voir →</span>
+                  <span className="text-xs text-[#00A651] group-hover:underline flex-shrink-0">Voir →</span>
                 </a>
               ))}
             </div>

@@ -20,7 +20,7 @@ function timeAgo(dateStr: string) {
   const hours = Math.floor(diff / 3600000);
   const days  = Math.floor(diff / 86400000);
   if (mins  < 1)  return "À l'instant";
-  if (mins  < 60) return `${mins} min`;
+  if (mins  < 60) return `${mins}min`;
   if (hours < 24) return `${hours}h`;
   return `${days}j`;
 }
@@ -45,12 +45,12 @@ export default function NotificationsPage() {
 
   return (
     <div className="min-h-screen bg-[#0D0D0D] py-8 px-4">
-      <div className="max-w-2xl mx-auto space-y-4">
+      <div className="max-w-2xl mx-auto space-y-5">
 
-        {/* En-tête */}
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold text-white flex items-center gap-2">
-            <Bell size={20} className="text-[#00A651]" /> Notifications
+          <h1 className="font-heading text-xl font-bold text-white flex items-center gap-2.5">
+            <Bell size={20} className="text-[#00A651]" />
+            Notifications
             {notifs.length > 0 && (
               <span className="bg-[#00A651] text-white text-xs font-bold px-2 py-0.5 rounded-full">
                 {notifs.length}
@@ -61,55 +61,53 @@ export default function NotificationsPage() {
             <button
               onClick={markAllRead}
               disabled={marking}
-              className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-white transition disabled:opacity-50"
+              className="flex items-center gap-1.5 text-xs text-[#6B7280] hover:text-white transition-colors duration-150 disabled:opacity-50 cursor-pointer"
             >
               {marking ? <Loader2 size={12} className="animate-spin" /> : <CheckCheck size={14} />}
-              Tout marquer comme lu
+              Tout lire
             </button>
           )}
         </div>
 
-        {/* Contenu */}
         {loading ? (
-          <div className="flex items-center justify-center py-20">
+          <div className="flex items-center justify-center py-24">
             <Loader2 size={24} className="text-[#00A651] animate-spin" />
           </div>
         ) : notifs.length === 0 ? (
-          <div className="bg-[#111] border border-gray-800 rounded-2xl p-12 text-center">
-            <Bell size={40} className="text-gray-700 mx-auto mb-4" />
-            <p className="text-gray-500 font-medium">Aucune notification</p>
-            <p className="text-gray-700 text-sm mt-1">Tu seras alerté quand quelqu'un te contacte</p>
+          <div className="bg-[#111] border border-[#1F2937] rounded-2xl p-14 text-center">
+            <div className="w-14 h-14 bg-[#1F2937] rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <Bell size={24} className="text-[#6B7280]" />
+            </div>
+            <p className="text-white font-semibold mb-1">Aucune notification</p>
+            <p className="text-[#6B7280] text-sm">Tu seras alerté quand quelqu'un te contacte</p>
           </div>
         ) : (
-          <div className="bg-[#111] border border-gray-800 rounded-2xl overflow-hidden divide-y divide-gray-800">
+          <div className="bg-[#111] border border-[#1F2937] rounded-2xl overflow-hidden divide-y divide-[#1F2937]">
             {notifs.map((n) => (
               <Link
                 key={n.id}
                 href={`/messages?with=${n.from.id}`}
-                className="flex items-start gap-3 px-4 py-4 hover:bg-gray-900 transition"
+                className="flex items-start gap-3 px-4 py-4 hover:bg-[#1F2937]/40 transition-colors duration-150 cursor-pointer"
               >
-                {/* Avatar */}
-                <div className="relative w-10 h-10 rounded-full overflow-hidden bg-gray-800 flex-shrink-0 mt-0.5">
+                <div className="relative w-10 h-10 rounded-full overflow-hidden bg-[#1F2937] flex-shrink-0 mt-0.5">
                   {n.from.avatarUrl ? (
                     <Image src={n.from.avatarUrl} alt={n.from.fullName} fill className="object-cover" />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center font-bold text-gray-500 text-sm">
+                    <div className="w-full h-full flex items-center justify-center font-heading font-bold text-[#00A651] text-sm">
                       {n.from.fullName[0]?.toUpperCase()}
                     </div>
                   )}
                 </div>
 
-                {/* Texte */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-0.5">
-                    <MessageCircle size={13} className="text-[#00A651] flex-shrink-0" />
+                    <MessageCircle size={12} className="text-[#00A651] flex-shrink-0" />
                     <span className="text-white text-sm font-semibold truncate">{n.from.fullName}</span>
-                    <span className="text-xs text-gray-600 flex-shrink-0 ml-auto">{timeAgo(n.createdAt)}</span>
+                    <span className="text-xs text-[#6B7280] flex-shrink-0 ml-auto">{timeAgo(n.createdAt)}</span>
                   </div>
-                  <p className="text-gray-400 text-sm truncate">{n.preview}</p>
+                  <p className="text-[#6B7280] text-sm truncate">{n.preview}</p>
                 </div>
 
-                {/* Point non lu */}
                 <div className="w-2 h-2 bg-[#00A651] rounded-full mt-2 flex-shrink-0" />
               </Link>
             ))}
