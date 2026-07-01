@@ -9,7 +9,6 @@ export default function SettingsPage() {
           appearance={{
             variables: {
               colorBackground:       "#111111",
-              colorInputBackground:  "#1a1a1a",
               colorText:             "#f9fafb",
               colorTextSecondary:    "#9ca3af",
               colorPrimary:          "#00A651",
