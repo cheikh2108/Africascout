@@ -22,13 +22,10 @@ export default async function DashboardPage() {
     where: { clerkId: userId },
     include: {
       playerProfile: { include: { videos: true } },
-      sentMessages: {
-        orderBy: { createdAt: "desc" },
-        take: 1,
-      },
-      receivedMessages: {
-        where: { readAt: null },
-        select: { id: true },
+      _count: {
+        select: {
+          receivedMessages: { where: { readAt: null } },
+        },
       },
     },
   });
@@ -41,7 +38,7 @@ export default async function DashboardPage() {
 
   const totalViews  = videos.reduce((s, v) => s + v.views, 0);
   const totalLikes  = videos.reduce((s, v) => s + v.likes, 0);
-  const unreadCount = user.receivedMessages.length;
+  const unreadCount = user._count.receivedMessages;
 
   return (
     <div className="min-h-screen bg-[#0D0D0D] py-8 px-4">
