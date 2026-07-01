@@ -162,19 +162,19 @@ export default function ProfilePage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-[#111] border border-gray-800 rounded-2xl p-6"
+          className="bg-[#111] border border-[#1F2937] rounded-2xl p-6"
         >
           <div className="flex items-start justify-between mb-6">
             <h2 className="text-xl font-bold text-white">Mon profil</h2>
             {!editing ? (
               <button
                 onClick={() => setEditing(true)}
-                className="flex items-center gap-2 text-sm text-gray-400 hover:text-white border border-gray-700 px-3 py-1.5 rounded-lg hover:border-gray-500 transition"
+                className="flex items-center gap-2 text-sm text-gray-300 hover:text-white border border-gray-700 px-3 py-1.5 rounded-lg hover:border-gray-500 transition"
               >
                 <Pencil size={14} /> Modifier
               </button>
             ) : (
-              <button onClick={() => setEditing(false)} className="text-gray-500 hover:text-white">
+              <button onClick={() => setEditing(false)} className="text-[#6B7280] hover:text-white">
                 <X size={20} />
               </button>
             )}
@@ -191,7 +191,7 @@ export default function ProfilePage() {
                   className="object-cover"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-3xl text-gray-600">
+                <div className="w-full h-full flex items-center justify-center text-3xl text-[#6B7280]/70">
                   {profile?.fullName?.[0]?.toUpperCase()}
                 </div>
               )}
@@ -219,13 +219,13 @@ export default function ProfilePage() {
                 <Field label="Organisation / Club" editing={editing}>
                   {editing
                     ? <input value={form.organization} placeholder="Ex: Espérance de Tunis" onChange={(e) => setForm((f) => ({ ...f, organization: e.target.value }))} className={inputCls} />
-                    : <span className="text-white">{sc?.organization ?? <span className="text-gray-600">—</span>}</span>
+                    : <span className="text-white">{sc?.organization ?? <span className="text-[#6B7280]/70">—</span>}</span>
                   }
                 </Field>
                 <Field label="Zone de recherche" editing={editing}>
                   {editing
                     ? <input value={form.searchRegion} placeholder="Ex: Afrique de l'Ouest" onChange={(e) => setForm((f) => ({ ...f, searchRegion: e.target.value }))} className={inputCls} />
-                    : <span className="text-white">{sc?.searchRegion ?? <span className="text-gray-600">—</span>}</span>
+                    : <span className="text-white">{sc?.searchRegion ?? <span className="text-[#6B7280]/70">—</span>}</span>
                   }
                 </Field>
               </>
@@ -271,7 +271,7 @@ export default function ProfilePage() {
                           {REGIONS_SENEGAL.map((r) => <option key={r} value={r}>{r}</option>)}
                         </select>
                       )
-                      : <span className="text-white">{p?.region ?? <span className="text-gray-600">—</span>}</span>
+                      : <span className="text-white">{p?.region ?? <span className="text-[#6B7280]/70">—</span>}</span>
                     }
                   </Field>
                 </div>
@@ -279,14 +279,14 @@ export default function ProfilePage() {
                 <Field label="Club actuel" editing={editing}>
                   {editing
                     ? <input value={form.club} placeholder="Facultatif" onChange={(e) => setForm((f) => ({ ...f, club: e.target.value }))} className={inputCls} />
-                    : <span className="text-white">{p?.club ?? <span className="text-gray-600">—</span>}</span>
+                    : <span className="text-white">{p?.club ?? <span className="text-[#6B7280]/70">—</span>}</span>
                   }
                 </Field>
 
                 <Field label="Bio" editing={editing}>
                   {editing
                     ? <textarea rows={3} value={form.bio} placeholder="Décris-toi en quelques mots..." onChange={(e) => setForm((f) => ({ ...f, bio: e.target.value }))} className={inputCls + " resize-none"} />
-                    : <span className="text-gray-300 text-sm">{p?.bio ?? <span className="text-gray-600">Aucune bio renseignée</span>}</span>
+                    : <span className="text-gray-300 text-sm">{p?.bio ?? <span className="text-[#6B7280]/70">Aucune bio renseignée</span>}</span>
                   }
                 </Field>
               </>
@@ -310,9 +310,9 @@ export default function ProfilePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-[#111] border border-gray-800 rounded-2xl p-6"
+            className="bg-[#111] border border-[#1F2937] rounded-2xl p-6"
           >
-            <h3 className="text-lg font-bold text-white mb-4">Statistiques saison</h3>
+            <h3 className="font-heading text-lg font-bold text-white mb-4">Statistiques saison</h3>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
               {[
                 { key: "goals",   label: "Buts",   emoji: "⚽" },
@@ -320,7 +320,7 @@ export default function ProfilePage() {
                 { key: "matches", label: "Matchs",  emoji: "🏟️" },
                 { key: "minutes", label: "Minutes", emoji: "⏱️" },
               ].map(({ key, label, emoji }) => (
-                <div key={key} className="bg-gray-900 rounded-xl p-4 text-center">
+                <div key={key} className="bg-[#0D0D0D] border border-[#1F2937] rounded-xl p-4 text-center">
                   <div className="text-2xl mb-1">{emoji}</div>
                   {editing ? (
                     <input
@@ -335,7 +335,7 @@ export default function ProfilePage() {
                       {(stats as Record<string, number>)[key] ?? 0}
                     </div>
                   )}
-                  <div className="text-xs text-gray-500 mt-1">{label}</div>
+                  <div className="text-xs text-[#6B7280] mt-1">{label}</div>
                 </div>
               ))}
             </div>
@@ -348,12 +348,12 @@ export default function ProfilePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-[#111] border border-gray-800 rounded-2xl p-6"
+            className="bg-[#111] border border-[#1F2937] rounded-2xl p-6"
           >
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-white">
+              <h3 className="font-heading text-lg font-bold text-white">
                 Vidéos highlights
-                <span className="ml-2 text-sm text-gray-500 font-normal">
+                <span className="ml-2 text-sm text-[#6B7280] font-normal">
                   {videos.length}/3 (plan Free)
                 </span>
               </h3>
@@ -388,7 +388,7 @@ export default function ProfilePage() {
                 <div className="flex gap-2">
                   <button
                     onClick={() => { setShowVideoForm(false); setVideoTitle(""); setPendingVideoUrl(null); }}
-                    className="px-4 py-2 text-gray-400 border border-gray-700 rounded-lg text-sm hover:border-gray-500 transition"
+                    className="px-4 py-2 text-gray-300 border border-gray-700 rounded-lg text-sm hover:border-gray-500 transition"
                   >
                     Annuler
                   </button>
@@ -404,19 +404,19 @@ export default function ProfilePage() {
             )}
 
             {videos.length === 0 && !showVideoForm ? (
-              <p className="text-gray-600 text-sm text-center py-8">
+              <p className="text-[#6B7280]/70 text-sm text-center py-8">
                 Aucune vidéo pour l'instant. Ajoute tes highlights !
               </p>
             ) : (
               <div className="space-y-3">
                 {videos.map((v) => (
-                  <div key={v.id} className="flex items-center gap-3 bg-gray-900 rounded-xl p-3">
+                  <div key={v.id} className="flex items-center gap-3 bg-[#0D0D0D] border border-[#1F2937] rounded-xl p-3">
                     <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center flex-shrink-0">
                       <Play size={16} className="text-[#00A651]" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-white text-sm font-medium truncate">{v.title}</p>
-                      <div className="flex gap-3 text-xs text-gray-500 mt-0.5">
+                      <div className="flex gap-3 text-xs text-[#6B7280] mt-0.5">
                         <span className="flex items-center gap-1"><Eye size={11} /> {v.views}</span>
                         <span className="flex items-center gap-1"><Heart size={11} /> {v.likes}</span>
                       </div>
@@ -444,11 +444,11 @@ export default function ProfilePage() {
 function Field({ label, editing, children }: { label: string; editing: boolean; children: React.ReactNode }) {
   return (
     <div>
-      <label className="block text-xs text-gray-500 mb-1">{label}</label>
+      <label className="block text-xs text-[#6B7280] mb-1">{label}</label>
       {children}
     </div>
   );
 }
 
 // Classes CSS communes pour les inputs en mode édition
-const inputCls = "w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#00A651] transition";
+const inputCls = "w-full bg-[#0D0D0D] border border-[#1F2937] rounded-xl px-3 py-2.5 text-white text-sm placeholder-[#6B7280] focus:outline-none focus:border-[#00A651] transition-colors duration-150";
