@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
@@ -42,7 +42,8 @@ function Avatar({ user, size = 10 }: { user: UserSnippet; size?: number }) {
   );
 }
 
-export default function MessagesPage() {
+// Le composant interne utilise useSearchParams — il doit être dans un Suspense
+function MessagesContent() {
   const searchParams = useSearchParams();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeUser,    setActiveUser]    = useState<UserSnippet | null>(null);
@@ -255,5 +256,17 @@ export default function MessagesPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function MessagesPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#0D0D0D] flex items-center justify-center">
+        <Loader2 size={24} className="text-[#00A651] animate-spin" />
+      </div>
+    }>
+      <MessagesContent />
+    </Suspense>
   );
 }

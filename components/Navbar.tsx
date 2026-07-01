@@ -27,7 +27,7 @@ export function Navbar() {
           Africa<span className="text-[#00A651]">Scout</span>
         </Link>
         <Show when="signed-in">
-          <UserButton afterSignOutUrl="/" />
+          <UserButton />
         </Show>
       </header>
 
