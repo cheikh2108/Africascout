@@ -27,3 +27,5 @@ Thumbs.db
 prisma/generated/
 
 /lib/generated/prisma
+
+africasccout-spec.md
