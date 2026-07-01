@@ -24,7 +24,7 @@ Le projet part de zéro : seul un dossier vide existe pour l'instant. Le dévelo
 ## Connexion base de données
 
 ```
-DATABASE_URL="postgresql://postgres:bataille2108@167.86.80.169:8432/africascout"
+DATABASE_URL="postgresql://postgres:<MOT_DE_PASSE>@167.86.80.169:8432/africascout"
 ```
 
 Cette variable doit être placée dans `.env` (jamais commitée dans git — vérifier que `.env` est dans `.gitignore`).
