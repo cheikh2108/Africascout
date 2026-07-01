@@ -3,20 +3,22 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Show, UserButton } from "@clerk/nextjs";
-import { Home, Search, User, MessageCircle } from "lucide-react";
+import { Home, Search, User, MessageCircle, Bell, Settings } from "lucide-react";
 
 const NAV = [
-  { href: "/feed",      label: "Feed",      icon: Home },
-  { href: "/search",    label: "Recherche",  icon: Search },
-  { href: "/profile",   label: "Profil",     icon: User },
-  { href: "/messages",  label: "Messages",   icon: MessageCircle },
+  { href: "/feed",          label: "Feed",          icon: Home },
+  { href: "/search",        label: "Recherche",      icon: Search },
+  { href: "/profile",       label: "Profil",         icon: User },
+  { href: "/messages",      label: "Messages",       icon: MessageCircle },
+  { href: "/notifications", label: "Notifications",  icon: Bell },
+  { href: "/settings",      label: "Paramètres",     icon: Settings },
 ];
 
 export function Navbar() {
   const pathname = usePathname();
 
   // Pas de navbar sur les pages d'auth et d'onboarding
-  const hidden = ["/sign-in", "/sign-up", "/onboarding", "/"].some((p) => pathname.startsWith(p));
+  const hidden = ["/sign-in", "/sign-up", "/onboarding"].some((p) => pathname.startsWith(p)) || pathname === "/";
   if (hidden) return null;
 
   return (
