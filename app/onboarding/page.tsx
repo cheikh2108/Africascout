@@ -90,8 +90,12 @@ export default function OnboardingPage() {
         return;
       }
 
-      // Redirige vers le dashboard après onboarding réussi
-      router.push("/dashboard");
+      // Joueur → profil pour compléter ses infos, scout/agent → search pour trouver des talents
+      if (selectedRole === "PLAYER") {
+        router.push("/profile");
+      } else {
+        router.push("/search");
+      }
     } catch {
       setError("Erreur réseau, réessaie.");
     } finally {

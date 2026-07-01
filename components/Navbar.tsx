@@ -5,13 +5,22 @@ import { usePathname } from "next/navigation";
 import { Show, UserButton } from "@clerk/nextjs";
 import { Home, Search, User, MessageCircle, Bell, Settings } from "lucide-react";
 
-const NAV = [
-  { href: "/feed",          label: "Feed",          icon: Home },
-  { href: "/search",        label: "Recherche",      icon: Search },
-  { href: "/profile",       label: "Profil",         icon: User },
-  { href: "/messages",      label: "Messages",       icon: MessageCircle },
-  { href: "/notifications", label: "Notifications",  icon: Bell },
-  { href: "/settings",      label: "Paramètres",     icon: Settings },
+// 4 items max sur mobile — barre du bas
+const NAV_MOBILE = [
+  { href: "/feed",     label: "Feed",      icon: Home },
+  { href: "/search",   label: "Recherche", icon: Search },
+  { href: "/profile",  label: "Profil",    icon: User },
+  { href: "/messages", label: "Messages",  icon: MessageCircle },
+];
+
+// Sidebar desktop — tous les liens
+const NAV_DESKTOP = [
+  { href: "/feed",          label: "Feed",         icon: Home },
+  { href: "/search",        label: "Recherche",    icon: Search },
+  { href: "/profile",       label: "Profil",       icon: User },
+  { href: "/messages",      label: "Messages",     icon: MessageCircle },
+  { href: "/notifications", label: "Notifications",icon: Bell },
+  { href: "/settings",      label: "Paramètres",   icon: Settings },
 ];
 
 export function Navbar() {
@@ -33,9 +42,9 @@ export function Navbar() {
         </Show>
       </header>
 
-      {/* Navigation du bas — mobile */}
+      {/* Navigation du bas — mobile (4 items max) */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 bg-[#0D0D0D]/95 backdrop-blur border-t border-gray-800 flex sm:hidden">
-        {NAV.map(({ href, label, icon: Icon }) => {
+        {NAV_MOBILE.map(({ href, label, icon: Icon }) => {
           const active = pathname.startsWith(href);
           return (
             <Link
@@ -52,9 +61,9 @@ export function Navbar() {
         })}
       </nav>
 
-      {/* Navigation latérale — desktop */}
+      {/* Navigation latérale — desktop (tous les liens) */}
       <aside className="hidden sm:flex fixed left-0 top-14 bottom-0 w-56 flex-col gap-1 px-3 py-4 border-r border-gray-800 bg-[#0D0D0D]">
-        {NAV.map(({ href, label, icon: Icon }) => {
+        {NAV_DESKTOP.map(({ href, label, icon: Icon }) => {
           const active = pathname.startsWith(href);
           return (
             <Link
