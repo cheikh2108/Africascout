@@ -26,10 +26,11 @@ export async function POST(req: Request) {
 
   const { role, fullName } = result.data;
 
-  // Mise à jour du User en base (créé par le webhook Clerk à l'inscription)
-  const user = await prisma.user.update({
-    where: { clerkId: userId },
-    data: { role: role as Role, fullName },
+  // Upsert : crée le User s'il n'existe pas (cas où le webhook Clerk a raté)
+  const user = await prisma.user.upsert({
+    where:  { clerkId: userId },
+    update: { role: role as Role, fullName },
+    create: { clerkId: userId, role: role as Role, fullName },
   });
 
   // Création du profil spécifique selon le rôle choisi
