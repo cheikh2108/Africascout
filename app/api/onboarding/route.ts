@@ -30,7 +30,7 @@ export async function POST(req: Request) {
   const user = await prisma.user.upsert({
     where:  { clerkId: userId },
     update: { role: role as Role, fullName },
-    create: { clerkId: userId, role: role as Role, fullName },
+    create: { clerkId: userId, role: role as Role, fullName, email: `${userId}@clerk.local` },
   });
 
   // Création du profil spécifique selon le rôle choisi
