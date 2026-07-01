@@ -22,17 +22,8 @@ export async function POST(req: Request) {
   const folder = uploadType === "video" ? "africascout/videos" : "africascout/avatars";
 
   // Paramètres de transformation selon le type
-  const params: Record<string, string | number> = {
-    timestamp,
-    folder,
-    ...(uploadType === "avatar" && {
-      transformation: "w_400,h_400,c_fill,g_face,f_webp,q_auto",
-    }),
-    ...(uploadType === "video" && {
-      resource_type: "video",
-      transformation: "q_auto,f_mp4",
-    }),
-  };
+  // On ne signe que timestamp + folder — ajouter d'autres params casse la signature
+  const params: Record<string, string | number> = { timestamp, folder };
 
   const signature = cloudinary.utils.api_sign_request(
     params,
