@@ -42,6 +42,10 @@ type Profile = {
     age: number; position: string; country: string; region?: string | null;
     club?: string | null; bio?: string | null; stats: Stats; videos: Video[];
   };
+  scoutProfile?: {
+    organization?: string | null;
+    searchRegion?: string | null;
+  };
 };
 
 export default function ProfilePage() {
@@ -59,6 +63,7 @@ export default function ProfilePage() {
     fullName: "", avatarUrl: "", age: 0,
     position: "ST", country: "SN", region: "", club: "", bio: "",
     goals: 0, assists: 0, matches: 0, minutes: 0,
+    organization: "", searchRegion: "",
   });
 
   useEffect(() => {
@@ -67,19 +72,22 @@ export default function ProfilePage() {
       .then((data) => {
         setProfile(data);
         const p = data.playerProfile;
+        const s = data.scoutProfile;
         setForm({
           fullName: data.fullName ?? "",
           avatarUrl: data.avatarUrl ?? "",
-          age:      p?.age ?? 0,
-          position: p?.position ?? "ST",
-          country:  p?.country ?? "SN",
-          region:   p?.region ?? "",
-          club:     p?.club ?? "",
-          bio:      p?.bio ?? "",
-          goals:    p?.stats?.goals ?? 0,
-          assists:  p?.stats?.assists ?? 0,
-          matches:  p?.stats?.matches ?? 0,
-          minutes:  p?.stats?.minutes ?? 0,
+          age:          p?.age ?? 0,
+          position:     p?.position ?? "ST",
+          country:      p?.country ?? "SN",
+          region:       p?.region ?? "",
+          club:         p?.club ?? "",
+          bio:          p?.bio ?? "",
+          goals:        p?.stats?.goals ?? 0,
+          assists:      p?.stats?.assists ?? 0,
+          matches:      p?.stats?.matches ?? 0,
+          minutes:      p?.stats?.minutes ?? 0,
+          organization: s?.organization ?? "",
+          searchRegion: s?.searchRegion ?? "",
         });
         setLoading(false);
       })
@@ -92,20 +100,22 @@ export default function ProfilePage() {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        fullName:  form.fullName,
-        avatarUrl: form.avatarUrl || null,
-        age:       Number(form.age),
-        position:  form.position,
-        country:   form.country,
-        region:    form.region || null,
-        club:      form.club || null,
-        bio:       form.bio || null,
+        fullName:     form.fullName,
+        avatarUrl:    form.avatarUrl || null,
+        age:          Number(form.age),
+        position:     form.position,
+        country:      form.country,
+        region:       form.region || null,
+        club:         form.club || null,
+        bio:          form.bio || null,
         stats: {
           goals:   Number(form.goals),
           assists: Number(form.assists),
           matches: Number(form.matches),
           minutes: Number(form.minutes),
         },
+        organization: form.organization || null,
+        searchRegion: form.searchRegion || null,
       }),
     });
     // Recharge le profil mis à jour
@@ -138,9 +148,11 @@ export default function ProfilePage() {
   }
 
   const p = profile?.playerProfile;
+  const sc = profile?.scoutProfile;
   const stats = p?.stats ?? {};
   const videos = p?.videos ?? [];
   const isPlayer = profile?.role === "PLAYER";
+  const isScout  = profile?.role === "SCOUT" || profile?.role === "AGENT";
 
   return (
     <div className="min-h-screen bg-[#0D0D0D] py-10 px-4">
@@ -201,6 +213,23 @@ export default function ProfilePage() {
                 : <span className="text-white font-semibold">{profile?.fullName}</span>
               }
             </Field>
+
+            {isScout && (
+              <>
+                <Field label="Organisation / Club" editing={editing}>
+                  {editing
+                    ? <input value={form.organization} placeholder="Ex: Espérance de Tunis" onChange={(e) => setForm((f) => ({ ...f, organization: e.target.value }))} className={inputCls} />
+                    : <span className="text-white">{sc?.organization ?? <span className="text-gray-600">—</span>}</span>
+                  }
+                </Field>
+                <Field label="Zone de recherche" editing={editing}>
+                  {editing
+                    ? <input value={form.searchRegion} placeholder="Ex: Afrique de l'Ouest" onChange={(e) => setForm((f) => ({ ...f, searchRegion: e.target.value }))} className={inputCls} />
+                    : <span className="text-white">{sc?.searchRegion ?? <span className="text-gray-600">—</span>}</span>
+                  }
+                </Field>
+              </>
+            )}
 
             {isPlayer && (
               <>
