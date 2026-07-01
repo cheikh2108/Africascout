@@ -8,22 +8,14 @@ export default function SettingsPage() {
         <UserProfile
           appearance={{
             variables: {
-              colorBackground:       "#111111",
-              colorText:             "#f9fafb",
-              colorTextSecondary:    "#9ca3af",
-              colorPrimary:          "#00A651",
-              colorDanger:           "#ef4444",
-              borderRadius:          "0.75rem",
+              colorBackground: "#111111",
+              colorPrimary:    "#00A651",
+              colorDanger:     "#ef4444",
+              borderRadius:    "0.75rem",
             },
             elements: {
-              card:              "shadow-none border border-gray-800 bg-[#111]",
-              navbar:            "border-r border-gray-800 bg-[#111]",
-              navbarButton:      "text-gray-400 hover:text-white",
-              headerTitle:       "text-white",
-              headerSubtitle:    "text-gray-400",
-              formFieldInput:    "bg-[#1a1a1a] border-gray-700 text-white",
+              card:              "shadow-none border border-gray-800",
               formButtonPrimary: "bg-[#00A651] hover:bg-green-600",
-              badge:             "bg-[#00A651]/20 text-[#00A651]",
             },
           }}
         />
