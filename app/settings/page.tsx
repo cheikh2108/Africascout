@@ -25,10 +25,7 @@ export default function SettingsPage() {
               borderRadius:    "0.75rem",
             },
             elements: {
-              rootBox:  "w-full",
-              cardBox:  "w-full shadow-none !border-0 !rounded-none !bg-transparent",
-              card:     "shadow-none !border-0 !bg-transparent",
-              navbar:   "border-r border-[var(--stroke)]",
+              rootBox:           "w-full",
               formButtonPrimary: "bg-[#00A651] hover:bg-green-600",
             },
           }}
