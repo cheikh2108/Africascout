@@ -44,11 +44,11 @@ export default function NotificationsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0D0D0D] py-8 px-4">
+    <div className="min-h-screen bg-[var(--surface)] py-8 px-4">
       <div className="max-w-2xl mx-auto space-y-5">
 
         <div className="flex items-center justify-between">
-          <h1 className="font-heading text-xl font-bold text-white flex items-center gap-2.5">
+          <h1 className="font-heading text-xl font-bold text-[var(--ink)] flex items-center gap-2.5">
             <Bell size={20} className="text-[#00A651]" />
             Notifications
             {notifs.length > 0 && (
@@ -61,7 +61,7 @@ export default function NotificationsPage() {
             <button
               onClick={markAllRead}
               disabled={marking}
-              className="flex items-center gap-1.5 text-xs text-[#6B7280] hover:text-white transition-colors duration-150 disabled:opacity-50 cursor-pointer"
+              className="flex items-center gap-1.5 text-xs text-[var(--muted)] hover:text-[var(--ink)] transition-colors duration-150 disabled:opacity-50 cursor-pointer"
             >
               {marking ? <Loader2 size={12} className="animate-spin" /> : <CheckCheck size={14} />}
               Tout lire
@@ -74,22 +74,22 @@ export default function NotificationsPage() {
             <Loader2 size={24} className="text-[#00A651] animate-spin" />
           </div>
         ) : notifs.length === 0 ? (
-          <div className="bg-[#111] border border-[#1F2937] rounded-2xl p-14 text-center">
-            <div className="w-14 h-14 bg-[#1F2937] rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <Bell size={24} className="text-[#6B7280]" />
+          <div className="bg-[var(--panel)] border border-[var(--stroke)] rounded-2xl p-14 text-center">
+            <div className="w-14 h-14 bg-[var(--stroke)] rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <Bell size={24} className="text-[var(--muted)]" />
             </div>
-            <p className="text-white font-semibold mb-1">Aucune notification</p>
-            <p className="text-[#6B7280] text-sm">Tu seras alerté quand quelqu'un te contacte</p>
+            <p className="text-[var(--ink)] font-semibold mb-1">Aucune notification</p>
+            <p className="text-[var(--muted)] text-sm">Tu seras alerté quand quelqu'un te contacte</p>
           </div>
         ) : (
-          <div className="bg-[#111] border border-[#1F2937] rounded-2xl overflow-hidden divide-y divide-[#1F2937]">
+          <div className="bg-[var(--panel)] border border-[var(--stroke)] rounded-2xl overflow-hidden divide-y divide-[var(--stroke)]">
             {notifs.map((n) => (
               <Link
                 key={n.id}
                 href={`/messages?with=${n.from.id}`}
-                className="flex items-start gap-3 px-4 py-4 hover:bg-[#1F2937]/40 transition-colors duration-150 cursor-pointer"
+                className="flex items-start gap-3 px-4 py-4 hover:bg-[var(--stroke)]/30 transition-colors duration-150 cursor-pointer"
               >
-                <div className="relative w-10 h-10 rounded-full overflow-hidden bg-[#1F2937] flex-shrink-0 mt-0.5">
+                <div className="relative w-10 h-10 rounded-full overflow-hidden bg-[var(--stroke)] flex-shrink-0 mt-0.5">
                   {n.from.avatarUrl ? (
                     <Image src={n.from.avatarUrl} alt={n.from.fullName} fill className="object-cover" />
                   ) : (
@@ -102,10 +102,10 @@ export default function NotificationsPage() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-0.5">
                     <MessageCircle size={12} className="text-[#00A651] flex-shrink-0" />
-                    <span className="text-white text-sm font-semibold truncate">{n.from.fullName}</span>
-                    <span className="text-xs text-[#6B7280] flex-shrink-0 ml-auto">{timeAgo(n.createdAt)}</span>
+                    <span className="text-[var(--ink)] text-sm font-semibold truncate">{n.from.fullName}</span>
+                    <span className="text-xs text-[var(--muted)] flex-shrink-0 ml-auto">{timeAgo(n.createdAt)}</span>
                   </div>
-                  <p className="text-[#6B7280] text-sm truncate">{n.preview}</p>
+                  <p className="text-[var(--muted)] text-sm truncate">{n.preview}</p>
                 </div>
 
                 <div className="w-2 h-2 bg-[#00A651] rounded-full mt-2 flex-shrink-0" />

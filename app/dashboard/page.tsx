@@ -14,7 +14,7 @@ const POSITIONS: Record<string, string> = {
   LW: "Ailier gauche", RW: "Ailier droit", ST: "Attaquant",
 };
 
-const CARD = "bg-[#111] border border-[#1F2937] rounded-2xl";
+const CARD = "bg-[var(--panel)] border border-[var(--stroke)] rounded-2xl";
 
 export default async function DashboardPage() {
   const { userId } = await auth();
@@ -35,12 +35,12 @@ export default async function DashboardPage() {
   const unreadCount  = await prisma.message.count({ where: { toUserId: user.id, readAt: null } });
 
   return (
-    <div className="min-h-screen bg-[#0D0D0D] py-8 px-4">
+    <div className="min-h-screen bg-[var(--surface)] py-8 px-4">
       <div className="max-w-2xl mx-auto space-y-5">
 
         {/* ── En-tête ── */}
         <div className={`${CARD} p-5 flex items-center gap-4`}>
-          <div className="relative w-14 h-14 rounded-full overflow-hidden bg-[#1F2937] flex-shrink-0 ring-2 ring-[#00A651]/30">
+          <div className="relative w-14 h-14 rounded-full overflow-hidden bg-[var(--stroke)] flex-shrink-0 ring-2 ring-[#00A651]/30">
             {user.avatarUrl ? (
               <Image src={user.avatarUrl} alt={user.fullName} fill className="object-cover" />
             ) : (
@@ -50,10 +50,10 @@ export default async function DashboardPage() {
             )}
           </div>
           <div className="flex-1 min-w-0">
-            <h1 className="font-heading text-lg font-bold text-white truncate">
+            <h1 className="font-heading text-lg font-bold text-[var(--ink)] truncate">
               Bonjour, {user.fullName.split(" ")[0]}
             </h1>
-            <p className="text-sm text-[#6B7280] flex items-center gap-1.5 mt-0.5">
+            <p className="text-sm text-[var(--muted)] flex items-center gap-1.5 mt-0.5">
               {profile ? POSITIONS[profile.position] ?? profile.position : user.role}
               {profile?.region && (
                 <span className="flex items-center gap-1"><MapPin size={11} />{profile.region}</span>
@@ -83,8 +83,8 @@ export default async function DashboardPage() {
               <div className={`w-8 h-8 rounded-xl ${bg} flex items-center justify-center`}>
                 <Icon size={15} className={color} />
               </div>
-              <span className="font-heading text-xl font-bold text-white leading-none">{value}</span>
-              <span className="text-[10px] text-[#6B7280] font-medium">{label}</span>
+              <span className="font-heading text-xl font-bold text-[var(--ink)] leading-none">{value}</span>
+              <span className="text-[10px] text-[var(--muted)] font-medium">{label}</span>
             </div>
           ))}
         </div>
@@ -92,20 +92,20 @@ export default async function DashboardPage() {
         {/* ── Vidéos ── */}
         <div className={`${CARD} p-5`}>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-heading font-semibold text-white flex items-center gap-2">
+            <h2 className="font-heading font-semibold text-[var(--ink)] flex items-center gap-2">
               <Video size={16} className="text-[#00A651]" /> Mes vidéos
             </h2>
-            <Link href="/profile" className="text-xs text-[#6B7280] hover:text-white transition-colors duration-150 flex items-center gap-1 cursor-pointer">
+            <Link href="/profile" className="text-xs text-[var(--muted)] hover:text-[var(--ink)] transition-colors duration-150 flex items-center gap-1 cursor-pointer">
               Gérer <ArrowRight size={12} />
             </Link>
           </div>
 
           {videos.length === 0 ? (
             <div className="text-center py-8">
-              <div className="w-12 h-12 bg-[#1F2937] rounded-2xl flex items-center justify-center mx-auto mb-3">
-                <Video size={20} className="text-[#6B7280]" />
+              <div className="w-12 h-12 bg-[var(--stroke)] rounded-2xl flex items-center justify-center mx-auto mb-3">
+                <Video size={20} className="text-[var(--muted)]" />
               </div>
-              <p className="text-[#6B7280] text-sm mb-4">Aucune vidéo pour l'instant</p>
+              <p className="text-[var(--muted)] text-sm mb-4">Aucune vidéo pour l'instant</p>
               <Link
                 href="/profile"
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#00A651] text-white rounded-xl text-sm font-semibold hover:bg-green-600 transition-colors duration-150 cursor-pointer"
@@ -116,12 +116,12 @@ export default async function DashboardPage() {
           ) : (
             <div className="space-y-2">
               {videos.map((v) => (
-                <div key={v.id} className="flex items-center gap-3 bg-[#0D0D0D] border border-[#1F2937] rounded-xl p-3">
+                <div key={v.id} className="flex items-center gap-3 bg-[var(--panel-alt)] border border-[var(--stroke)] rounded-xl p-3">
                   <div className="w-9 h-9 bg-[#00A651]/10 rounded-xl flex items-center justify-center flex-shrink-0">
                     <Video size={14} className="text-[#00A651]" />
                   </div>
-                  <p className="flex-1 text-white text-sm font-medium truncate">{v.title}</p>
-                  <div className="flex gap-3 text-xs text-[#6B7280] flex-shrink-0">
+                  <p className="flex-1 text-[var(--ink)] text-sm font-medium truncate">{v.title}</p>
+                  <div className="flex gap-3 text-xs text-[var(--muted)] flex-shrink-0">
                     <span className="flex items-center gap-1"><Eye size={11} />{v.views}</span>
                     <span className="flex items-center gap-1"><Heart size={11} />{v.likes}</span>
                   </div>
@@ -142,7 +142,7 @@ export default async function DashboardPage() {
             <Link
               key={href}
               href={href}
-              className={`${CARD} p-5 hover:border-[#00A651]/40 hover:bg-[#111]/80 transition-all duration-150 cursor-pointer group relative`}
+              className={`${CARD} p-5 hover:border-[#00A651]/40 transition-all duration-150 cursor-pointer group relative`}
             >
               {badge && badge > 0 && (
                 <span className="absolute top-3 right-3 w-5 h-5 bg-[#00A651] text-white text-[10px] rounded-full flex items-center justify-center font-bold">
@@ -152,8 +152,8 @@ export default async function DashboardPage() {
               <div className="w-9 h-9 bg-[#00A651]/10 rounded-xl flex items-center justify-center mb-3">
                 <Icon size={17} className="text-[#00A651]" />
               </div>
-              <div className="font-heading font-semibold text-white text-sm mb-1">{label}</div>
-              <div className="text-xs text-[#6B7280] group-hover:text-gray-400 transition-colors duration-150">{desc}</div>
+              <div className="font-heading font-semibold text-[var(--ink)] text-sm mb-1">{label}</div>
+              <div className="text-xs text-[var(--muted)] transition-colors duration-150">{desc}</div>
             </Link>
           ))}
         </div>
@@ -183,18 +183,18 @@ function ProfileCompletion({
   if (pct === 100) return null;
 
   return (
-    <div className="bg-[#111] border border-[#1F2937] rounded-2xl p-5">
+    <div className="bg-[var(--panel)] border border-[var(--stroke)] rounded-2xl p-5">
       <div className="flex items-center justify-between mb-3">
-        <h2 className="font-heading font-semibold text-white text-sm">Complète ton profil</h2>
+        <h2 className="font-heading font-semibold text-[var(--ink)] text-sm">Complète ton profil</h2>
         <span className="text-xs text-[#00A651] font-bold">{pct}%</span>
       </div>
-      <div className="w-full bg-[#1F2937] rounded-full h-1.5 mb-4 overflow-hidden">
+      <div className="w-full bg-[var(--stroke)] rounded-full h-1.5 mb-4 overflow-hidden">
         <div className="bg-[#00A651] h-1.5 rounded-full transition-all duration-300" style={{ width: `${pct}%` }} />
       </div>
       <div className="space-y-2 mb-4">
         {steps.map((s) => (
-          <div key={s.label} className={`flex items-center gap-2 text-sm ${s.done ? "text-[#6B7280] line-through" : "text-gray-300"}`}>
-            <CheckCircle2 size={14} className={s.done ? "text-[#00A651]" : "text-[#1F2937]"} />
+          <div key={s.label} className={`flex items-center gap-2 text-sm ${s.done ? "text-[var(--muted)] line-through" : "text-[var(--ink)]"}`}>
+            <CheckCircle2 size={14} className={s.done ? "text-[#00A651]" : "text-[var(--stroke)]"} />
             {s.label}
           </div>
         ))}

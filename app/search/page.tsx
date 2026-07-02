@@ -28,7 +28,7 @@ const AGE_GROUPS = [
   { value: "25+",   label: "25+ ans" },
 ];
 
-const SELECT_CLS = "w-full bg-[#0D0D0D] border border-[#1F2937] rounded-xl px-3 py-2.5 text-white text-sm focus:outline-none focus:border-[#00A651] transition-colors duration-150 cursor-pointer";
+const SELECT_CLS = "w-full bg-[var(--panel-alt)] border border-[var(--stroke)] rounded-xl px-3 py-2.5 text-[var(--ink)] text-sm focus:outline-none focus:border-[#00A651] transition-colors duration-150 cursor-pointer";
 
 type Player = {
   id: string; age: number; position: string; region: string | null;
@@ -76,25 +76,25 @@ export default function SearchPage() {
   const clearFilters = () => { setPosition(""); setRegion(""); setAgeGroup(""); };
 
   return (
-    <div className="min-h-screen bg-[#0D0D0D] py-8 px-4">
+    <div className="min-h-screen bg-[var(--surface)] py-8 px-4">
       <div className="max-w-3xl mx-auto">
 
         <div className="mb-7">
-          <h1 className="font-heading text-2xl font-bold text-white mb-1">Recherche</h1>
-          <p className="text-[#6B7280] text-sm">Talents du football sénégalais — 14 régions</p>
+          <h1 className="font-heading text-2xl font-bold text-[var(--ink)] mb-1">Recherche</h1>
+          <p className="text-[var(--muted)] text-sm">Talents du football sénégalais — 14 régions</p>
         </div>
 
         {/* Barre de recherche */}
         <div className="flex gap-2 mb-4">
           <div className="flex-1 relative">
-            <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#6B7280]" />
+            <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--muted)]" />
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && doSearch(1)}
               placeholder="Nom, club..."
-              className="w-full bg-[#111] border border-[#1F2937] rounded-xl pl-10 pr-4 py-3 text-white placeholder-[#6B7280] focus:outline-none focus:border-[#00A651] transition-colors duration-150 text-sm"
+              className="w-full bg-[var(--panel)] border border-[var(--stroke)] rounded-xl pl-10 pr-4 py-3 text-[var(--ink)] placeholder-[var(--muted)] focus:outline-none focus:border-[#00A651] transition-colors duration-150 text-sm"
             />
           </div>
           <button
@@ -108,7 +108,7 @@ export default function SearchPage() {
             className={`px-3 border rounded-xl transition-all duration-150 flex items-center gap-1.5 text-sm cursor-pointer ${
               activeFilterCount > 0
                 ? "border-[#00A651] text-[#00A651] bg-[#00A651]/10"
-                : "border-[#1F2937] text-[#6B7280] hover:border-gray-600 hover:text-white"
+                : "border-[var(--stroke)] text-[var(--muted)] hover:border-[var(--muted)] hover:text-[var(--ink)]"
             }`}
           >
             <SlidersHorizontal size={15} />
@@ -130,22 +130,22 @@ export default function SearchPage() {
               transition={{ duration: 0.2 }}
               className="overflow-hidden mb-4"
             >
-              <div className="bg-[#111] border border-[#1F2937] rounded-2xl p-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
+              <div className="bg-[var(--panel)] border border-[var(--stroke)] rounded-2xl p-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
                 <div>
-                  <label className="block text-xs text-[#6B7280] mb-1.5 font-medium">Poste</label>
+                  <label className="block text-xs text-[var(--muted)] mb-1.5 font-medium">Poste</label>
                   <select value={position} onChange={(e) => setPosition(e.target.value)} className={SELECT_CLS}>
                     {POSITIONS.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs text-[#6B7280] mb-1.5 font-medium">Région</label>
+                  <label className="block text-xs text-[var(--muted)] mb-1.5 font-medium">Région</label>
                   <select value={region} onChange={(e) => setRegion(e.target.value)} className={SELECT_CLS}>
                     <option value="">Toutes les régions</option>
                     {REGIONS_SENEGAL.map((r) => <option key={r} value={r}>{r}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs text-[#6B7280] mb-1.5 font-medium">Âge</label>
+                  <label className="block text-xs text-[var(--muted)] mb-1.5 font-medium">Âge</label>
                   <select value={ageGroup} onChange={(e) => setAgeGroup(e.target.value)} className={SELECT_CLS}>
                     {AGE_GROUPS.map((a) => <option key={a.value} value={a.value}>{a.label}</option>)}
                   </select>
@@ -154,7 +154,7 @@ export default function SearchPage() {
               {activeFilterCount > 0 && (
                 <button
                   onClick={clearFilters}
-                  className="mt-2 flex items-center gap-1 text-xs text-[#6B7280] hover:text-white transition-colors duration-150 cursor-pointer"
+                  className="mt-2 flex items-center gap-1 text-xs text-[var(--muted)] hover:text-[var(--ink)] transition-colors duration-150 cursor-pointer"
                 >
                   <X size={12} /> Effacer les filtres
                 </button>
@@ -173,24 +173,24 @@ export default function SearchPage() {
         {/* Vide */}
         {!loading && searched && players.length === 0 && (
           <div className="text-center py-16">
-            <div className="w-14 h-14 bg-[#111] border border-[#1F2937] rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <Search size={24} className="text-[#6B7280]" />
+            <div className="w-14 h-14 bg-[var(--panel)] border border-[var(--stroke)] rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <Search size={24} className="text-[var(--muted)]" />
             </div>
-            <p className="text-[#6B7280] font-medium">Aucun joueur trouvé</p>
-            <p className="text-sm text-[#6B7280]/60 mt-1">Essaie d'autres critères</p>
+            <p className="text-[var(--muted)] font-medium">Aucun joueur trouvé</p>
+            <p className="text-sm text-[var(--muted)]/60 mt-1">Essaie d'autres critères</p>
           </div>
         )}
 
         {!loading && !searched && (
           <div className="text-center py-16">
-            <p className="text-[#6B7280] text-sm">Lance une recherche ou applique des filtres</p>
+            <p className="text-[var(--muted)] text-sm">Lance une recherche ou applique des filtres</p>
           </div>
         )}
 
         {/* Résultats */}
         {!loading && players.length > 0 && (
           <>
-            <p className="text-xs text-[#6B7280] mb-4">
+            <p className="text-xs text-[var(--muted)] mb-4">
               {pagination?.total} joueur{(pagination?.total ?? 0) > 1 ? "s" : ""} trouvé{(pagination?.total ?? 0) > 1 ? "s" : ""}
             </p>
             <div className="space-y-2.5">
@@ -203,9 +203,9 @@ export default function SearchPage() {
                 >
                   <Link
                     href={`/players/${player.id}`}
-                    className="flex items-center gap-4 bg-[#111] border border-[#1F2937] rounded-2xl p-4 hover:border-[#00A651]/40 hover:bg-[#111]/80 transition-all duration-150 group cursor-pointer"
+                    className="flex items-center gap-4 bg-[var(--panel)] border border-[var(--stroke)] rounded-2xl p-4 hover:border-[#00A651]/40 transition-all duration-150 group cursor-pointer"
                   >
-                    <div className="relative w-12 h-12 rounded-full overflow-hidden bg-[#1F2937] flex-shrink-0 ring-2 ring-[#1F2937] group-hover:ring-[#00A651]/30 transition-all duration-150">
+                    <div className="relative w-12 h-12 rounded-full overflow-hidden bg-[var(--stroke)] flex-shrink-0 ring-2 ring-[var(--stroke)] group-hover:ring-[#00A651]/30 transition-all duration-150">
                       {player.user.avatarUrl ? (
                         <Image src={player.user.avatarUrl} alt={player.user.fullName} fill className="object-cover" />
                       ) : (
@@ -217,7 +217,7 @@ export default function SearchPage() {
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="font-semibold text-white truncate group-hover:text-[#00A651] transition-colors duration-150">
+                        <span className="font-semibold text-[var(--ink)] truncate group-hover:text-[#00A651] transition-colors duration-150">
                           {player.user.fullName}
                         </span>
                         {player.user.isVerified && (
@@ -226,21 +226,21 @@ export default function SearchPage() {
                           </span>
                         )}
                       </div>
-                      <div className="flex items-center gap-3 mt-1 text-xs text-[#6B7280] flex-wrap">
-                        <span className="font-medium text-gray-400">
+                      <div className="flex items-center gap-3 mt-1 text-xs text-[var(--muted)] flex-wrap">
+                        <span className="font-medium text-[var(--ink)]/70">
                           {POSITIONS.find((p) => p.value === player.position)?.label ?? player.position}
                         </span>
                         {player.region && (
                           <span className="flex items-center gap-1"><MapPin size={10} />{player.region}</span>
                         )}
                         <span>{player.age} ans</span>
-                        {player.club && <span className="truncate text-[#6B7280]">{player.club}</span>}
+                        {player.club && <span className="truncate">{player.club}</span>}
                       </div>
                     </div>
 
                     <div className="flex items-center gap-3 flex-shrink-0">
                       {player.videos.length > 0 && (
-                        <span className="flex items-center gap-1 text-xs text-[#6B7280]">
+                        <span className="flex items-center gap-1 text-xs text-[var(--muted)]">
                           <Play size={11} /> {player.videos.length}
                         </span>
                       )}
@@ -262,15 +262,15 @@ export default function SearchPage() {
                 <button
                   onClick={() => doSearch(page - 1)}
                   disabled={page <= 1}
-                  className="flex items-center gap-1 px-4 py-2.5 border border-[#1F2937] text-[#6B7280] rounded-xl text-sm disabled:opacity-30 hover:border-gray-600 hover:text-white transition-all duration-150 cursor-pointer"
+                  className="flex items-center gap-1 px-4 py-2.5 border border-[var(--stroke)] text-[var(--muted)] rounded-xl text-sm disabled:opacity-30 hover:border-[var(--muted)] hover:text-[var(--ink)] transition-all duration-150 cursor-pointer"
                 >
                   <ChevronLeft size={15} /> Préc.
                 </button>
-                <span className="text-[#6B7280] text-sm">{page} / {pagination?.totalPages}</span>
+                <span className="text-[var(--muted)] text-sm">{page} / {pagination?.totalPages}</span>
                 <button
                   onClick={() => doSearch(page + 1)}
                   disabled={page >= (pagination?.totalPages ?? 1)}
-                  className="flex items-center gap-1 px-4 py-2.5 border border-[#1F2937] text-[#6B7280] rounded-xl text-sm disabled:opacity-30 hover:border-gray-600 hover:text-white transition-all duration-150 cursor-pointer"
+                  className="flex items-center gap-1 px-4 py-2.5 border border-[var(--stroke)] text-[var(--muted)] rounded-xl text-sm disabled:opacity-30 hover:border-[var(--muted)] hover:text-[var(--ink)] transition-all duration-150 cursor-pointer"
                 >
                   Suiv. <ChevronRight size={15} />
                 </button>

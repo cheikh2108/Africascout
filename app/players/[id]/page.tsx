@@ -32,20 +32,20 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
   const stats = (player.stats as Record<string, number>) ?? {};
 
   return (
-    <div className="min-h-screen bg-[#0D0D0D] py-8 px-4">
+    <div className="min-h-screen bg-[var(--surface)] py-8 px-4">
       <div className="max-w-2xl mx-auto space-y-4">
 
         <Link
           href="/search"
-          className="inline-flex items-center gap-2 text-sm text-[#6B7280] hover:text-white transition-colors duration-150 cursor-pointer"
+          className="inline-flex items-center gap-2 text-sm text-[var(--muted)] hover:text-[var(--ink)] transition-colors duration-150 cursor-pointer"
         >
           <ArrowLeft size={15} /> Retour
         </Link>
 
         {/* Carte profil */}
-        <div className="bg-[#111] border border-[#1F2937] rounded-2xl p-6">
+        <div className="bg-[var(--panel)] border border-[var(--stroke)] rounded-2xl p-6">
           <div className="flex items-start gap-4 mb-5">
-            <div className="relative w-16 h-16 rounded-full overflow-hidden bg-[#1F2937] flex-shrink-0 ring-2 ring-[#00A651]/30">
+            <div className="relative w-16 h-16 rounded-full overflow-hidden bg-[var(--stroke)] flex-shrink-0 ring-2 ring-[#00A651]/30">
               {player.user.avatarUrl ? (
                 <Image src={player.user.avatarUrl} alt={player.user.fullName} fill className="object-cover" />
               ) : (
@@ -56,26 +56,26 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <h1 className="font-heading text-xl font-bold text-white">{player.user.fullName}</h1>
+                <h1 className="font-heading text-xl font-bold text-[var(--ink)]">{player.user.fullName}</h1>
                 {player.user.isVerified && (
                   <span className="flex items-center gap-1 text-xs bg-[#00A651]/15 text-[#00A651] px-2 py-0.5 rounded-full font-semibold">
                     <CheckCircle2 size={11} /> Vérifié
                   </span>
                 )}
               </div>
-              <div className="flex items-center gap-3 text-sm text-[#6B7280] mt-1 flex-wrap">
-                <span className="text-gray-300 font-medium">{POSITIONS[player.position] ?? player.position}</span>
+              <div className="flex items-center gap-3 text-sm text-[var(--muted)] mt-1 flex-wrap">
+                <span className="text-[var(--ink)] font-medium">{POSITIONS[player.position] ?? player.position}</span>
                 <span className="flex items-center gap-1"><MapPin size={12} />Sénégal</span>
                 <span>{player.age} ans</span>
               </div>
-              {player.club && <p className="text-xs text-[#6B7280] mt-1">{player.club}</p>}
+              {player.club && <p className="text-xs text-[var(--muted)] mt-1">{player.club}</p>}
             </div>
             <div className="flex-shrink-0 text-right">
               <div className="flex items-center gap-1 text-[#F5A623] justify-end">
                 <Star size={16} fill="#F5A623" />
-                <span className="font-heading text-2xl font-bold text-white">{player.rating.toFixed(1)}</span>
+                <span className="font-heading text-2xl font-bold text-[var(--ink)]">{player.rating.toFixed(1)}</span>
               </div>
-              <div className="text-xs text-[#6B7280]">score</div>
+              <div className="text-xs text-[var(--muted)]">score</div>
             </div>
           </div>
 
@@ -89,15 +89,15 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
           )}
 
           {player.bio && (
-            <p className="text-[#6B7280] text-sm leading-relaxed border-t border-[#1F2937] pt-4 mt-4">
+            <p className="text-[var(--muted)] text-sm leading-relaxed border-t border-[var(--stroke)] pt-4 mt-4">
               {player.bio}
             </p>
           )}
         </div>
 
         {/* Stats */}
-        <div className="bg-[#111] border border-[#1F2937] rounded-2xl p-6">
-          <h2 className="font-heading font-semibold text-white mb-4">Statistiques saison</h2>
+        <div className="bg-[var(--panel)] border border-[var(--stroke)] rounded-2xl p-6">
+          <h2 className="font-heading font-semibold text-[var(--ink)] mb-4">Statistiques saison</h2>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             {[
               { key: "goals",   label: "Buts",    icon: "⚽" },
@@ -105,10 +105,10 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
               { key: "matches", label: "Matchs",  icon: "🏟" },
               { key: "minutes", label: "Minutes", icon: "⏱" },
             ].map(({ key, label, icon }) => (
-              <div key={key} className="bg-[#0D0D0D] border border-[#1F2937] rounded-xl p-4 text-center">
+              <div key={key} className="bg-[var(--panel-alt)] border border-[var(--stroke)] rounded-xl p-4 text-center">
                 <div className="text-xl mb-1">{icon}</div>
-                <div className="font-heading text-2xl font-bold text-white">{stats[key] ?? 0}</div>
-                <div className="text-xs text-[#6B7280] mt-1">{label}</div>
+                <div className="font-heading text-2xl font-bold text-[var(--ink)]">{stats[key] ?? 0}</div>
+                <div className="text-xs text-[var(--muted)] mt-1">{label}</div>
               </div>
             ))}
           </div>
@@ -116,8 +116,8 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
 
         {/* Vidéos */}
         {player.videos.length > 0 && (
-          <div className="bg-[#111] border border-[#1F2937] rounded-2xl p-6">
-            <h2 className="font-heading font-semibold text-white mb-4">Vidéos highlights</h2>
+          <div className="bg-[var(--panel)] border border-[var(--stroke)] rounded-2xl p-6">
+            <h2 className="font-heading font-semibold text-[var(--ink)] mb-4">Vidéos highlights</h2>
             <div className="space-y-2.5">
               {player.videos.map((v) => (
                 <a
@@ -125,14 +125,14 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
                   href={v.cloudinaryUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 bg-[#0D0D0D] border border-[#1F2937] rounded-xl p-3 hover:border-[#00A651]/40 transition-all duration-150 group cursor-pointer"
+                  className="flex items-center gap-3 bg-[var(--panel-alt)] border border-[var(--stroke)] rounded-xl p-3 hover:border-[#00A651]/40 transition-all duration-150 group cursor-pointer"
                 >
                   <div className="w-10 h-10 bg-[#00A651]/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#00A651]/20 transition-colors duration-150">
                     <Play size={16} className="text-[#00A651]" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-white text-sm font-medium truncate">{v.title}</p>
-                    <div className="flex gap-3 text-xs text-[#6B7280] mt-0.5">
+                    <p className="text-[var(--ink)] text-sm font-medium truncate">{v.title}</p>
+                    <div className="flex gap-3 text-xs text-[var(--muted)] mt-0.5">
                       <span className="flex items-center gap-1"><Eye size={10} />{v.views}</span>
                       <span className="flex items-center gap-1"><Heart size={10} />{v.likes}</span>
                     </div>

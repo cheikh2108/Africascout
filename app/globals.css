@@ -1,20 +1,46 @@
 @import "tailwindcss";
 
+/* ── Tokens statiques ── */
 @theme {
-  --color-brand-green:  #00A651;
-  --color-brand-gold:   #F5A623;
-  --color-brand-dark:   #0D0D0D;
-  --color-brand-card:   #111111;
-  --color-brand-border: #1F2937;
-  --color-brand-muted:  #6B7280;
-
+  --color-brand-green: #00A651;
+  --color-brand-gold:  #F5A623;
   --font-heading: "Outfit", sans-serif;
   --font-body:    "Inter", sans-serif;
 }
 
+/* ── Tokens dynamiques (basculent avec le thème) ── */
+@theme inline {
+  --color-surface:   var(--surface);
+  --color-panel:     var(--panel);
+  --color-panel-alt: var(--panel-alt);
+  --color-stroke:    var(--stroke);
+  --color-ink:       var(--ink);
+  --color-muted:     var(--muted);
+}
+
+/* Mode sombre (défaut) */
+:root, .dark {
+  --surface:   #0D0D0D;
+  --panel:     #111111;
+  --panel-alt: #0D0D0D;
+  --stroke:    #1F2937;
+  --ink:       #F9FAFB;
+  --muted:     #6B7280;
+}
+
+/* Mode clair */
+.light {
+  --surface:   #F7F8FA;
+  --panel:     #FFFFFF;
+  --panel-alt: #F1F5F9;
+  --stroke:    #E2E8F0;
+  --ink:       #0F172A;
+  --muted:     #64748B;
+}
+
 body {
-  background-color: #0D0D0D;
-  color: #F9FAFB;
+  background-color: var(--surface);
+  color: var(--ink);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   overscroll-behavior-y: contain;
@@ -24,18 +50,15 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
 }
 
-/* Focus visible uniforme */
 :focus-visible {
   outline: 2px solid #00A651;
   outline-offset: 2px;
 }
 
-/* Scrollbar discrète */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #1F2937; border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: var(--stroke); border-radius: 2px; }
 
-/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

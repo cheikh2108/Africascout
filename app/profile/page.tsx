@@ -8,7 +8,6 @@ import { Save, Pencil, X, Video, Play, Eye, Heart } from "lucide-react";
 import { UploadButton } from "@/components/UploadButton";
 import { REGIONS_SENEGAL } from "@/lib/senegal";
 
-// Postes de football avec leur libellé complet
 const POSITIONS = [
   { value: "GK", label: "Gardien" },
   { value: "CB", label: "Défenseur central" },
@@ -21,7 +20,6 @@ const POSITIONS = [
   { value: "ST", label: "Attaquant" },
 ];
 
-// Quelques pays africains principaux
 const COUNTRIES = [
   { code: "SN", name: "Sénégal" }, { code: "GH", name: "Ghana" },
   { code: "NG", name: "Nigeria" }, { code: "CI", name: "Côte d'Ivoire" },
@@ -48,6 +46,8 @@ type Profile = {
   };
 };
 
+const inputCls = "w-full bg-[var(--panel-alt)] border border-[var(--stroke)] rounded-xl px-3 py-2.5 text-[var(--ink)] text-sm placeholder-[var(--muted)] focus:outline-none focus:border-[#00A651] transition-colors duration-150";
+
 export default function ProfilePage() {
   const router = useRouter();
   const [profile, setProfile]   = useState<Profile | null>(null);
@@ -58,7 +58,6 @@ export default function ProfilePage() {
   const [videoTitle, setVideoTitle]       = useState("");
   const [pendingVideoUrl, setPendingVideoUrl] = useState<string | null>(null);
 
-  // Formulaire d'édition — copie des données actuelles
   const [form, setForm] = useState({
     fullName: "", avatarUrl: "", age: 0,
     position: "ST", country: "SN", region: "", club: "", bio: "",
@@ -118,7 +117,6 @@ export default function ProfilePage() {
         searchRegion: form.searchRegion || null,
       }),
     });
-    // Recharge le profil mis à jour
     const updated = await fetch("/api/profile").then((r) => r.json());
     setProfile(updated);
     setSaving(false);
@@ -141,7 +139,7 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0D0D0D] flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--surface)] flex items-center justify-center">
         <div className="w-8 h-8 border-2 border-[#00A651] border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -155,26 +153,26 @@ export default function ProfilePage() {
   const isScout  = profile?.role === "SCOUT" || profile?.role === "AGENT";
 
   return (
-    <div className="min-h-screen bg-[#0D0D0D] py-10 px-4">
+    <div className="min-h-screen bg-[var(--surface)] py-10 px-4">
       <div className="max-w-2xl mx-auto space-y-6">
 
         {/* ── Carte profil principale ── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-[#111] border border-[#1F2937] rounded-2xl p-6"
+          className="bg-[var(--panel)] border border-[var(--stroke)] rounded-2xl p-6"
         >
           <div className="flex items-start justify-between mb-6">
-            <h2 className="text-xl font-bold text-white">Mon profil</h2>
+            <h2 className="text-xl font-bold text-[var(--ink)]">Mon profil</h2>
             {!editing ? (
               <button
                 onClick={() => setEditing(true)}
-                className="flex items-center gap-2 text-sm text-gray-300 hover:text-white border border-gray-700 px-3 py-1.5 rounded-lg hover:border-gray-500 transition"
+                className="flex items-center gap-2 text-sm text-[var(--muted)] hover:text-[var(--ink)] border border-[var(--stroke)] px-3 py-1.5 rounded-lg hover:border-[var(--muted)] transition-colors duration-150 cursor-pointer"
               >
                 <Pencil size={14} /> Modifier
               </button>
             ) : (
-              <button onClick={() => setEditing(false)} className="text-[#6B7280] hover:text-white">
+              <button onClick={() => setEditing(false)} className="text-[var(--muted)] hover:text-[var(--ink)] cursor-pointer">
                 <X size={20} />
               </button>
             )}
@@ -182,7 +180,7 @@ export default function ProfilePage() {
 
           {/* Avatar */}
           <div className="flex items-center gap-4 mb-6">
-            <div className="relative w-20 h-20 rounded-full overflow-hidden bg-gray-800 flex-shrink-0">
+            <div className="relative w-20 h-20 rounded-full overflow-hidden bg-[var(--stroke)] flex-shrink-0">
               {(editing ? form.avatarUrl : profile?.avatarUrl) ? (
                 <Image
                   src={(editing ? form.avatarUrl : profile?.avatarUrl) as string}
@@ -191,7 +189,7 @@ export default function ProfilePage() {
                   className="object-cover"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-3xl text-[#6B7280]/70">
+                <div className="w-full h-full flex items-center justify-center text-3xl text-[var(--muted)]">
                   {profile?.fullName?.[0]?.toUpperCase()}
                 </div>
               )}
@@ -205,27 +203,26 @@ export default function ProfilePage() {
             )}
           </div>
 
-          {/* Champs du formulaire / affichage */}
           <div className="grid grid-cols-1 gap-4">
-            <Field label="Nom complet" editing={editing}>
+            <Field label="Nom complet">
               {editing
                 ? <input value={form.fullName} onChange={(e) => setForm((f) => ({ ...f, fullName: e.target.value }))} className={inputCls} />
-                : <span className="text-white font-semibold">{profile?.fullName}</span>
+                : <span className="text-[var(--ink)] font-semibold">{profile?.fullName}</span>
               }
             </Field>
 
             {isScout && (
               <>
-                <Field label="Organisation / Club" editing={editing}>
+                <Field label="Organisation / Club">
                   {editing
                     ? <input value={form.organization} placeholder="Ex: Espérance de Tunis" onChange={(e) => setForm((f) => ({ ...f, organization: e.target.value }))} className={inputCls} />
-                    : <span className="text-white">{sc?.organization ?? <span className="text-[#6B7280]/70">—</span>}</span>
+                    : <span className="text-[var(--ink)]">{sc?.organization ?? <span className="text-[var(--muted)]">—</span>}</span>
                   }
                 </Field>
-                <Field label="Zone de recherche" editing={editing}>
+                <Field label="Zone de recherche">
                   {editing
                     ? <input value={form.searchRegion} placeholder="Ex: Afrique de l'Ouest" onChange={(e) => setForm((f) => ({ ...f, searchRegion: e.target.value }))} className={inputCls} />
-                    : <span className="text-white">{sc?.searchRegion ?? <span className="text-[#6B7280]/70">—</span>}</span>
+                    : <span className="text-[var(--ink)]">{sc?.searchRegion ?? <span className="text-[var(--muted)]">—</span>}</span>
                   }
                 </Field>
               </>
@@ -234,36 +231,36 @@ export default function ProfilePage() {
             {isPlayer && (
               <>
                 <div className="grid grid-cols-2 gap-4">
-                  <Field label="Âge" editing={editing}>
+                  <Field label="Âge">
                     {editing
                       ? <input type="number" value={form.age} onChange={(e) => setForm((f) => ({ ...f, age: +e.target.value }))} className={inputCls} />
-                      : <span className="text-white">{p?.age} ans</span>
+                      : <span className="text-[var(--ink)]">{p?.age} ans</span>
                     }
                   </Field>
-                  <Field label="Poste" editing={editing}>
+                  <Field label="Poste">
                     {editing
                       ? (
                         <select value={form.position} onChange={(e) => setForm((f) => ({ ...f, position: e.target.value }))} className={inputCls}>
                           {POSITIONS.map((pos) => <option key={pos.value} value={pos.value}>{pos.label}</option>)}
                         </select>
                       )
-                      : <span className="text-white">{POSITIONS.find((pos) => pos.value === p?.position)?.label}</span>
+                      : <span className="text-[var(--ink)]">{POSITIONS.find((pos) => pos.value === p?.position)?.label}</span>
                     }
                   </Field>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <Field label="Pays" editing={editing}>
+                  <Field label="Pays">
                     {editing
                       ? (
                         <select value={form.country} onChange={(e) => setForm((f) => ({ ...f, country: e.target.value }))} className={inputCls}>
                           {COUNTRIES.map((c) => <option key={c.code} value={c.code}>{c.name}</option>)}
                         </select>
                       )
-                      : <span className="text-white">{COUNTRIES.find((c) => c.code === p?.country)?.name ?? p?.country}</span>
+                      : <span className="text-[var(--ink)]">{COUNTRIES.find((c) => c.code === p?.country)?.name ?? p?.country}</span>
                     }
                   </Field>
-                  <Field label="Région" editing={editing}>
+                  <Field label="Région">
                     {editing
                       ? (
                         <select value={form.region} onChange={(e) => setForm((f) => ({ ...f, region: e.target.value }))} className={inputCls}>
@@ -271,22 +268,22 @@ export default function ProfilePage() {
                           {REGIONS_SENEGAL.map((r) => <option key={r} value={r}>{r}</option>)}
                         </select>
                       )
-                      : <span className="text-white">{p?.region ?? <span className="text-[#6B7280]/70">—</span>}</span>
+                      : <span className="text-[var(--ink)]">{p?.region ?? <span className="text-[var(--muted)]">—</span>}</span>
                     }
                   </Field>
                 </div>
 
-                <Field label="Club actuel" editing={editing}>
+                <Field label="Club actuel">
                   {editing
                     ? <input value={form.club} placeholder="Facultatif" onChange={(e) => setForm((f) => ({ ...f, club: e.target.value }))} className={inputCls} />
-                    : <span className="text-white">{p?.club ?? <span className="text-[#6B7280]/70">—</span>}</span>
+                    : <span className="text-[var(--ink)]">{p?.club ?? <span className="text-[var(--muted)]">—</span>}</span>
                   }
                 </Field>
 
-                <Field label="Bio" editing={editing}>
+                <Field label="Bio">
                   {editing
                     ? <textarea rows={3} value={form.bio} placeholder="Décris-toi en quelques mots..." onChange={(e) => setForm((f) => ({ ...f, bio: e.target.value }))} className={inputCls + " resize-none"} />
-                    : <span className="text-gray-300 text-sm">{p?.bio ?? <span className="text-[#6B7280]/70">Aucune bio renseignée</span>}</span>
+                    : <span className="text-[var(--muted)] text-sm">{p?.bio ?? "Aucune bio renseignée"}</span>
                   }
                 </Field>
               </>
@@ -297,7 +294,7 @@ export default function ProfilePage() {
             <button
               onClick={handleSave}
               disabled={saving}
-              className="mt-6 w-full flex items-center justify-center gap-2 bg-[#00A651] text-white py-3 rounded-lg font-semibold hover:bg-green-600 transition disabled:opacity-50"
+              className="mt-6 w-full flex items-center justify-center gap-2 bg-[#00A651] text-white py-3 rounded-xl font-semibold hover:bg-green-600 transition-colors duration-150 disabled:opacity-50 cursor-pointer"
             >
               {saving ? "Enregistrement..." : <><Save size={16} /> Sauvegarder</>}
             </button>
@@ -310,9 +307,9 @@ export default function ProfilePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-[#111] border border-[#1F2937] rounded-2xl p-6"
+            className="bg-[var(--panel)] border border-[var(--stroke)] rounded-2xl p-6"
           >
-            <h3 className="font-heading text-lg font-bold text-white mb-4">Statistiques saison</h3>
+            <h3 className="font-heading text-lg font-bold text-[var(--ink)] mb-4">Statistiques saison</h3>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
               {[
                 { key: "goals",   label: "Buts",   emoji: "⚽" },
@@ -320,7 +317,7 @@ export default function ProfilePage() {
                 { key: "matches", label: "Matchs",  emoji: "🏟️" },
                 { key: "minutes", label: "Minutes", emoji: "⏱️" },
               ].map(({ key, label, emoji }) => (
-                <div key={key} className="bg-[#0D0D0D] border border-[#1F2937] rounded-xl p-4 text-center">
+                <div key={key} className="bg-[var(--panel-alt)] border border-[var(--stroke)] rounded-xl p-4 text-center">
                   <div className="text-2xl mb-1">{emoji}</div>
                   {editing ? (
                     <input
@@ -328,14 +325,14 @@ export default function ProfilePage() {
                       min={0}
                       value={form[key as keyof typeof form]}
                       onChange={(e) => setForm((f) => ({ ...f, [key]: +e.target.value }))}
-                      className="w-full bg-gray-800 text-white text-center rounded-lg px-2 py-1 text-sm border border-gray-700 focus:outline-none focus:border-[#00A651]"
+                      className="w-full bg-[var(--panel)] border border-[var(--stroke)] text-[var(--ink)] text-center rounded-lg px-2 py-1 text-sm focus:outline-none focus:border-[#00A651] transition-colors duration-150"
                     />
                   ) : (
-                    <div className="text-2xl font-bold text-white">
+                    <div className="text-2xl font-bold text-[var(--ink)]">
                       {(stats as Record<string, number>)[key] ?? 0}
                     </div>
                   )}
-                  <div className="text-xs text-[#6B7280] mt-1">{label}</div>
+                  <div className="text-xs text-[var(--muted)] mt-1">{label}</div>
                 </div>
               ))}
             </div>
@@ -348,28 +345,27 @@ export default function ProfilePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-[#111] border border-[#1F2937] rounded-2xl p-6"
+            className="bg-[var(--panel)] border border-[var(--stroke)] rounded-2xl p-6"
           >
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-heading text-lg font-bold text-white">
+              <h3 className="font-heading text-lg font-bold text-[var(--ink)]">
                 Vidéos highlights
-                <span className="ml-2 text-sm text-[#6B7280] font-normal">
+                <span className="ml-2 text-sm text-[var(--muted)] font-normal">
                   {videos.length}/3 (plan Free)
                 </span>
               </h3>
               {videos.length < 3 && !showVideoForm && (
                 <button
                   onClick={() => setShowVideoForm(true)}
-                  className="flex items-center gap-2 text-sm text-[#00A651] border border-[#00A651]/40 px-3 py-1.5 rounded-lg hover:bg-[#00A651]/10 transition"
+                  className="flex items-center gap-2 text-sm text-[#00A651] border border-[#00A651]/40 px-3 py-1.5 rounded-lg hover:bg-[#00A651]/10 transition-colors duration-150 cursor-pointer"
                 >
                   <Video size={14} /> Ajouter
                 </button>
               )}
             </div>
 
-            {/* Formulaire d'ajout de vidéo */}
             {showVideoForm && (
-              <div className="bg-gray-900 rounded-xl p-4 mb-4 space-y-3">
+              <div className="bg-[var(--panel-alt)] border border-[var(--stroke)] rounded-xl p-4 mb-4 space-y-3">
                 <input
                   value={videoTitle}
                   onChange={(e) => setVideoTitle(e.target.value)}
@@ -388,14 +384,14 @@ export default function ProfilePage() {
                 <div className="flex gap-2">
                   <button
                     onClick={() => { setShowVideoForm(false); setVideoTitle(""); setPendingVideoUrl(null); }}
-                    className="px-4 py-2 text-gray-300 border border-gray-700 rounded-lg text-sm hover:border-gray-500 transition"
+                    className="px-4 py-2 text-[var(--muted)] border border-[var(--stroke)] rounded-lg text-sm hover:border-[var(--muted)] transition-colors duration-150 cursor-pointer"
                   >
                     Annuler
                   </button>
                   <button
                     onClick={handleAddVideo}
                     disabled={!pendingVideoUrl || !videoTitle.trim()}
-                    className="flex-1 py-2 bg-[#00A651] text-white rounded-lg text-sm font-semibold hover:bg-green-600 transition disabled:opacity-40"
+                    className="flex-1 py-2 bg-[#00A651] text-white rounded-lg text-sm font-semibold hover:bg-green-600 transition-colors duration-150 disabled:opacity-40 cursor-pointer"
                   >
                     Publier
                   </button>
@@ -404,19 +400,19 @@ export default function ProfilePage() {
             )}
 
             {videos.length === 0 && !showVideoForm ? (
-              <p className="text-[#6B7280]/70 text-sm text-center py-8">
+              <p className="text-[var(--muted)] text-sm text-center py-8">
                 Aucune vidéo pour l'instant. Ajoute tes highlights !
               </p>
             ) : (
               <div className="space-y-3">
                 {videos.map((v) => (
-                  <div key={v.id} className="flex items-center gap-3 bg-[#0D0D0D] border border-[#1F2937] rounded-xl p-3">
-                    <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <div key={v.id} className="flex items-center gap-3 bg-[var(--panel-alt)] border border-[var(--stroke)] rounded-xl p-3">
+                    <div className="w-10 h-10 bg-[#00A651]/10 rounded-lg flex items-center justify-center flex-shrink-0">
                       <Play size={16} className="text-[#00A651]" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-white text-sm font-medium truncate">{v.title}</p>
-                      <div className="flex gap-3 text-xs text-[#6B7280] mt-0.5">
+                      <p className="text-[var(--ink)] text-sm font-medium truncate">{v.title}</p>
+                      <div className="flex gap-3 text-xs text-[var(--muted)] mt-0.5">
                         <span className="flex items-center gap-1"><Eye size={11} /> {v.views}</span>
                         <span className="flex items-center gap-1"><Heart size={11} /> {v.likes}</span>
                       </div>
@@ -440,15 +436,11 @@ export default function ProfilePage() {
   );
 }
 
-// Composant utilitaire pour les champs du formulaire
-function Field({ label, editing, children }: { label: string; editing: boolean; children: React.ReactNode }) {
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <label className="block text-xs text-[#6B7280] mb-1">{label}</label>
+      <label className="block text-xs text-[var(--muted)] mb-1">{label}</label>
       {children}
     </div>
   );
 }
-
-// Classes CSS communes pour les inputs en mode édition
-const inputCls = "w-full bg-[#0D0D0D] border border-[#1F2937] rounded-xl px-3 py-2.5 text-white text-sm placeholder-[#6B7280] focus:outline-none focus:border-[#00A651] transition-colors duration-150";

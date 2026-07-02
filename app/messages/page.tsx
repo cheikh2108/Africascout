@@ -31,7 +31,7 @@ function Avatar({ user, size = 10 }: { user: UserSnippet; size?: number }) {
   const px = size * 4;
   return (
     <div
-      className="relative rounded-full overflow-hidden bg-[#1F2937] flex-shrink-0"
+      className="relative rounded-full overflow-hidden bg-[var(--stroke)] flex-shrink-0"
       style={{ width: px, height: px }}
     >
       {user.avatarUrl ? (
@@ -118,13 +118,13 @@ function MessagesContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0D0D0D]">
+    <div className="min-h-screen bg-[var(--surface)]">
       <div className="max-w-3xl mx-auto flex h-[calc(100vh-3.5rem)]">
 
         {/* ── Liste conversations ── */}
-        <div className={`w-full sm:w-72 flex-shrink-0 border-r border-[#1F2937] flex flex-col ${activeUser ? "hidden sm:flex" : "flex"}`}>
-          <div className="px-4 py-4 border-b border-[#1F2937]">
-            <h1 className="font-heading text-base font-bold text-white">Messages</h1>
+        <div className={`w-full sm:w-72 flex-shrink-0 border-r border-[var(--stroke)] flex flex-col ${activeUser ? "hidden sm:flex" : "flex"}`}>
+          <div className="px-4 py-4 border-b border-[var(--stroke)]">
+            <h1 className="font-heading text-base font-bold text-[var(--ink)]">Messages</h1>
           </div>
 
           {loadingConvs ? (
@@ -133,11 +133,11 @@ function MessagesContent() {
             </div>
           ) : conversations.length === 0 ? (
             <div className="flex-1 flex flex-col items-center justify-center px-6 text-center">
-              <div className="w-12 h-12 bg-[#1F2937] rounded-2xl flex items-center justify-center mb-3">
-                <MessageCircle size={20} className="text-[#6B7280]" />
+              <div className="w-12 h-12 bg-[var(--stroke)] rounded-2xl flex items-center justify-center mb-3">
+                <MessageCircle size={20} className="text-[var(--muted)]" />
               </div>
-              <p className="text-sm text-[#6B7280] font-medium">Aucune conversation</p>
-              <p className="text-xs text-[#6B7280]/60 mt-1">Va sur le profil d'un joueur pour contacter</p>
+              <p className="text-sm text-[var(--muted)] font-medium">Aucune conversation</p>
+              <p className="text-xs text-[var(--muted)]/60 mt-1">Va sur le profil d'un joueur pour contacter</p>
             </div>
           ) : (
             <div className="flex-1 overflow-y-auto">
@@ -148,15 +148,15 @@ function MessagesContent() {
                   <button
                     key={conv.id}
                     onClick={() => openConversation(other)}
-                    className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-[#1F2937]/40 transition-colors duration-150 text-left cursor-pointer ${isActive ? "bg-[#1F2937]/50" : ""}`}
+                    className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-[var(--stroke)]/30 transition-colors duration-150 text-left cursor-pointer ${isActive ? "bg-[var(--stroke)]/40" : ""}`}
                   >
                     <Avatar user={other} size={10} />
                     <div className="flex-1 min-w-0">
                       <div className="flex justify-between items-baseline">
-                        <span className="font-medium text-white text-sm truncate">{other.fullName}</span>
-                        <span className="text-xs text-[#6B7280] flex-shrink-0 ml-2">{timeAgo(conv.createdAt)}</span>
+                        <span className="font-medium text-[var(--ink)] text-sm truncate">{other.fullName}</span>
+                        <span className="text-xs text-[var(--muted)] flex-shrink-0 ml-2">{timeAgo(conv.createdAt)}</span>
                       </div>
-                      <p className="text-xs text-[#6B7280] truncate mt-0.5">{conv.content}</p>
+                      <p className="text-xs text-[var(--muted)] truncate mt-0.5">{conv.content}</p>
                     </div>
                   </button>
                 );
@@ -169,23 +169,23 @@ function MessagesContent() {
         <div className={`flex-1 flex flex-col ${activeUser ? "flex" : "hidden sm:flex"}`}>
           {!activeUser ? (
             <div className="flex-1 flex flex-col items-center justify-center">
-              <div className="w-16 h-16 bg-[#111] border border-[#1F2937] rounded-2xl flex items-center justify-center mb-4">
-                <MessageCircle size={28} className="text-[#6B7280]" />
+              <div className="w-16 h-16 bg-[var(--panel)] border border-[var(--stroke)] rounded-2xl flex items-center justify-center mb-4">
+                <MessageCircle size={28} className="text-[var(--muted)]" />
               </div>
-              <p className="text-sm text-[#6B7280]">Sélectionne une conversation</p>
+              <p className="text-sm text-[var(--muted)]">Sélectionne une conversation</p>
             </div>
           ) : (
             <>
-              <div className="flex items-center gap-3 px-4 py-3 border-b border-[#1F2937]">
+              <div className="flex items-center gap-3 px-4 py-3 border-b border-[var(--stroke)]">
                 <button
                   onClick={() => setActiveUser(null)}
                   aria-label="Retour"
-                  className="sm:hidden text-[#6B7280] hover:text-white transition-colors duration-150 cursor-pointer p-1"
+                  className="sm:hidden text-[var(--muted)] hover:text-[var(--ink)] transition-colors duration-150 cursor-pointer p-1"
                 >
                   <ArrowLeft size={20} />
                 </button>
                 <Avatar user={activeUser} size={9} />
-                <span className="font-semibold text-white">{activeUser.fullName}</span>
+                <span className="font-semibold text-[var(--ink)]">{activeUser.fullName}</span>
               </div>
 
               <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
@@ -205,11 +205,11 @@ function MessagesContent() {
                           className={`max-w-[75%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
                             isMine
                               ? "bg-[#00A651] text-white rounded-tr-sm"
-                              : "bg-[#1F2937] text-gray-100 rounded-tl-sm"
+                              : "bg-[var(--stroke)] text-[var(--ink)] rounded-tl-sm"
                           }`}
                         >
                           {msg.content}
-                          <div className={`text-[10px] mt-1 ${isMine ? "text-green-200/80" : "text-[#6B7280]"}`}>
+                          <div className={`text-[10px] mt-1 ${isMine ? "text-green-200/80" : "text-[var(--muted)]"}`}>
                             {timeAgo(msg.createdAt)}
                             {isMine && msg.readAt && <span className="ml-1">· Lu</span>}
                           </div>
@@ -221,14 +221,14 @@ function MessagesContent() {
                 <div ref={bottomRef} />
               </div>
 
-              <div className="px-4 py-3 border-t border-[#1F2937] flex gap-2">
+              <div className="px-4 py-3 border-t border-[var(--stroke)] flex gap-2">
                 <input
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
                   placeholder="Ton message..."
-                  className="flex-1 bg-[#111] border border-[#1F2937] rounded-xl px-4 py-2.5 text-white text-sm placeholder-[#6B7280] focus:outline-none focus:border-[#00A651] transition-colors duration-150"
+                  className="flex-1 bg-[var(--panel)] border border-[var(--stroke)] rounded-xl px-4 py-2.5 text-[var(--ink)] text-sm placeholder-[var(--muted)] focus:outline-none focus:border-[#00A651] transition-colors duration-150"
                 />
                 <button
                   onClick={handleSend}
@@ -250,7 +250,7 @@ function MessagesContent() {
 export default function MessagesPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-[#0D0D0D] flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--surface)] flex items-center justify-center">
         <Loader2 size={24} className="text-[#00A651] animate-spin" />
       </div>
     }>

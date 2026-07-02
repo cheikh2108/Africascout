@@ -1,4 +1,5 @@
 import { ClerkProvider } from "@clerk/nextjs";
+import { ThemeProvider } from "next-themes";
 import { Inter, Outfit } from "next/font/google";
 import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
@@ -14,15 +15,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr">
+    <html lang="fr" suppressHydrationWarning>
       <body className={`${inter.variable} ${outfit.variable} font-sans`}>
-        <ClerkProvider>
-          <Navbar />
-          {/* padding-top pour la navbar fixe du haut, padding-bottom pour la nav mobile */}
-          <div className="pt-14 pb-16 sm:pl-56 sm:pb-0 min-h-screen">
-            {children}
-          </div>
-        </ClerkProvider>
+        <ThemeProvider attribute="class" defaultTheme="dark" disableTransitionOnChange>
+          <ClerkProvider>
+            <Navbar />
+            <div className="pt-14 pb-16 sm:pl-56 sm:pb-0 min-h-screen">
+              {children}
+            </div>
+          </ClerkProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

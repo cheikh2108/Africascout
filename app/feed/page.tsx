@@ -89,12 +89,12 @@ export default function FeedPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0D0D0D] py-8 px-4">
+    <div className="min-h-screen bg-[var(--surface)] py-8 px-4">
       <div className="max-w-xl mx-auto">
 
         <div className="mb-7">
-          <h1 className="font-heading text-2xl font-bold text-white mb-1">Feed</h1>
-          <p className="text-[#6B7280] text-sm">Derniers highlights du football sénégalais</p>
+          <h1 className="font-heading text-2xl font-bold text-[var(--ink)] mb-1">Feed</h1>
+          <p className="text-[var(--muted)] text-sm">Derniers highlights du football sénégalais</p>
         </div>
 
         <div className="space-y-4">
@@ -105,12 +105,12 @@ export default function FeedPage() {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: Math.min(i * 0.04, 0.3), duration: 0.25 }}
-                className="bg-[#111] border border-[#1F2937] rounded-2xl overflow-hidden"
+                className="bg-[var(--panel)] border border-[var(--stroke)] rounded-2xl overflow-hidden"
               >
                 {/* Header joueur */}
                 <div className="flex items-center gap-3 p-4 pb-3">
                   <Link href={`/players/${video.player.id}`} className="flex-shrink-0 cursor-pointer">
-                    <div className="relative w-10 h-10 rounded-full overflow-hidden bg-[#1F2937] ring-1 ring-[#1F2937]">
+                    <div className="relative w-10 h-10 rounded-full overflow-hidden bg-[var(--stroke)] ring-1 ring-[var(--stroke)]">
                       {video.player.user.avatarUrl ? (
                         <Image src={video.player.user.avatarUrl} alt={video.player.user.fullName} fill className="object-cover" loading="lazy" />
                       ) : (
@@ -122,26 +122,26 @@ export default function FeedPage() {
                   </Link>
                   <div className="flex-1 min-w-0">
                     <Link href={`/players/${video.player.id}`} className="cursor-pointer hover:text-[#00A651] transition-colors duration-150">
-                      <span className="font-semibold text-white text-sm">
+                      <span className="font-semibold text-[var(--ink)] text-sm">
                         {video.player.user.fullName}
                       </span>
                       {video.player.user.isVerified && (
                         <span className="ml-1.5 text-xs text-[#00A651] font-bold">✓</span>
                       )}
                     </Link>
-                    <div className="flex items-center gap-2 text-xs text-[#6B7280] mt-0.5">
+                    <div className="flex items-center gap-2 text-xs text-[var(--muted)] mt-0.5">
                       <span>{POSITIONS[video.player.position] ?? video.player.position}</span>
                       {video.player.region && (
                         <span className="flex items-center gap-0.5"><MapPin size={9} />{video.player.region}</span>
                       )}
                     </div>
                   </div>
-                  <span className="text-xs text-[#6B7280] flex-shrink-0">{timeAgo(video.createdAt)}</span>
+                  <span className="text-xs text-[var(--muted)] flex-shrink-0">{timeAgo(video.createdAt)}</span>
                 </div>
 
                 {/* Titre */}
                 <div className="px-4 pb-3">
-                  <p className="text-white text-sm font-medium">{video.title}</p>
+                  <p className="text-[var(--ink)] text-sm font-medium">{video.title}</p>
                 </div>
 
                 {/* Thumbnail */}
@@ -149,7 +149,7 @@ export default function FeedPage() {
                   href={video.cloudinaryUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block relative bg-[#0D0D0D] mx-4 rounded-xl overflow-hidden group cursor-pointer"
+                  className="block relative bg-[var(--panel-alt)] mx-4 rounded-xl overflow-hidden group cursor-pointer"
                   style={{ aspectRatio: "16/9" }}
                   onClick={() => {
                     fetch("/api/videos/view", {
@@ -164,7 +164,7 @@ export default function FeedPage() {
                       <Play size={22} fill="white" className="text-white ml-1" />
                     </div>
                   </div>
-                  <div className="absolute bottom-2 right-2 text-xs text-gray-400 bg-black/70 px-2 py-0.5 rounded-md">
+                  <div className="absolute bottom-2 right-2 text-xs text-white bg-black/70 px-2 py-0.5 rounded-md">
                     Voir ↗
                   </div>
                 </a>
@@ -175,13 +175,13 @@ export default function FeedPage() {
                     onClick={() => handleLike(video.id)}
                     aria-label="Liker cette vidéo"
                     className={`flex items-center gap-1.5 text-sm transition-colors duration-150 cursor-pointer ${
-                      likedIds.has(video.id) ? "text-red-400" : "text-[#6B7280] hover:text-red-400"
+                      likedIds.has(video.id) ? "text-red-400" : "text-[var(--muted)] hover:text-red-400"
                     }`}
                   >
                     <Heart size={16} fill={likedIds.has(video.id) ? "currentColor" : "none"} />
                     <span>{likeCounts[video.id] ?? video.likes}</span>
                   </button>
-                  <span className="flex items-center gap-1.5 text-sm text-[#6B7280]">
+                  <span className="flex items-center gap-1.5 text-sm text-[var(--muted)]">
                     <Eye size={16} />
                     <span>{video.views}</span>
                   </span>
@@ -193,17 +193,17 @@ export default function FeedPage() {
           <div ref={loaderRef} className="flex justify-center py-6">
             {loading && <Loader2 size={20} className="text-[#00A651] animate-spin" />}
             {!loading && !hasMore && videos.length > 0 && (
-              <p className="text-[#6B7280] text-sm">Tu as tout vu</p>
+              <p className="text-[var(--muted)] text-sm">Tu as tout vu</p>
             )}
           </div>
 
           {!loading && videos.length === 0 && (
             <div className="text-center py-20">
-              <div className="w-16 h-16 bg-[#111] border border-[#1F2937] rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Play size={28} className="text-[#6B7280]" />
+              <div className="w-16 h-16 bg-[var(--panel)] border border-[var(--stroke)] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Play size={28} className="text-[var(--muted)]" />
               </div>
-              <p className="text-[#6B7280] font-medium">Aucune vidéo pour l'instant</p>
-              <p className="text-sm text-[#6B7280]/60 mt-1">Les joueurs publient leurs highlights ici</p>
+              <p className="text-[var(--muted)] font-medium">Aucune vidéo pour l'instant</p>
+              <p className="text-sm text-[var(--muted)]/60 mt-1">Les joueurs publient leurs highlights ici</p>
             </div>
           )}
         </div>
