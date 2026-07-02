@@ -10,8 +10,7 @@ export default function SettingsPage() {
   useEffect(() => setMounted(true), []);
 
   const isDark = !mounted || resolvedTheme === "dark";
-  const bg     = isDark ? "#111111" : "#ffffff";
-  const border = isDark ? "#1F2937" : "#E2E8F0";
+  const bg     = isDark ? "#0D0D0D" : "#F7F8FA";
 
   return (
     <div className="min-h-screen bg-[var(--surface)] py-8 px-4">
@@ -26,12 +25,11 @@ export default function SettingsPage() {
               borderRadius:    "0.75rem",
             },
             elements: {
-              rootBox:           "w-full",
-              cardBox:           `w-full shadow-none border rounded-2xl`,
-              card:              "shadow-none",
+              rootBox:  "w-full",
+              cardBox:  "w-full shadow-none !border-0 !rounded-none !bg-transparent",
+              card:     "shadow-none !border-0 !bg-transparent",
+              navbar:   "border-r border-[var(--stroke)]",
               formButtonPrimary: "bg-[#00A651] hover:bg-green-600",
-              navbar:            `border-r`,
-              navbarMobileMenuButton: "hidden",
             },
           }}
         />
